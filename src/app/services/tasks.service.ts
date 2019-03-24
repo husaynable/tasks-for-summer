@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Task } from '../models/task.model';
 
 @Injectable({
@@ -8,9 +9,24 @@ import { Task } from '../models/task.model';
 })
 export class TasksService {
 
-  constructor(private db: AngularFirestore) { }
+  tasksCollection: AngularFirestoreCollection<Task>;
+
+  constructor(private db: AngularFirestore) {
+    this.tasksCollection = db.collection<Task>('tasks');
+  }
 
   getTasks(): Observable<Task[]> {
-    return this.db.collection<Task>('tasks').valueChanges();
+    return this.tasksCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Task;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
+  updateTask(task: Task): Promise<void> {
+    const taskDoc = this.db.doc<Task>(`tasks/${task.id}`);
+    return taskDoc.update(task);
   }
 }

@@ -1,3 +1,6 @@
-<div class="mat-elevation-z2">
+<div>
+  <mat-checkbox
+    [checked]="task.isFinished"
+    (change)="changeTaskStatus()"></mat-checkbox>
   {{ task.name }}
 </div>

@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+.app-task-item+.app-task-item {
+  margin-top: 15px;
+}
