@@ -7,11 +7,27 @@
     <input #nameInput placeholder="Введите задачу" matInput [value]="task.name" />
   </mat-form-field>
 </div>
-<span class="task-actions" *ngIf="!isEditing">
-  <button mat-icon-button (click)="changeMode(true)"><mat-icon>edit</mat-icon></button>
-  <button mat-icon-button><mat-icon>delete</mat-icon></button>
-</span>
-<span class="task-edit-actions" *ngIf="isEditing">
-  <button mat-icon-button (click)="changeTaskName(nameInput.value)"><mat-icon>done</mat-icon></button>
-  <button mat-icon-button (click)="changeMode(false)"><mat-icon>clear</mat-icon></button>
-</span>
+
+<div class="task-edit-actions" *ngIf="isEditing">
+  <button mat-icon-button (click)="changeTaskName(nameInput.value)">
+    <mat-icon>done</mat-icon>
+  </button>
+  <button mat-icon-button (click)="changeMode(false)">
+    <mat-icon>clear</mat-icon>
+  </button>
+</div>
+
+<button mat-icon-button [matMenuTriggerFor]="contextMenu" *ngIf="!isEditing">
+  <mat-icon>more_vert</mat-icon>
+</button>
+<mat-menu #contextMenu="matMenu">
+  <button mat-menu-item (click)="changeMode(true)">
+    <mat-icon>edit</mat-icon>
+    <span>Change task</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>delete</mat-icon>
+    <span>Delete task</span>
+  </button>
+</mat-menu>
+
