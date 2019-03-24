@@ -13,9 +13,15 @@ export class TaskItemComponent implements OnInit {
   @HostBinding('class') class = 'app-task-item mat-elevation-z2';
   @Input() task: Task;
 
+  isEditing = false;
+
   constructor(private tasksService: TasksService) { }
 
   ngOnInit() {
+  }
+
+  async changeTaskName(newName: string) {
+    await this.tasksService.updateTask({ ...this.task, name: newName });
   }
 
   async changeTaskStatus() {
