@@ -26,6 +26,7 @@ export class TasksService {
   }
 
   updateTask(task: Task): Promise<void> {
+    console.log(task);
     const taskDoc = this.db.doc<Task>(`tasks/${task.id}`);
     return taskDoc.update(task);
   }

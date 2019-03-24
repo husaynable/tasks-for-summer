@@ -29,6 +29,7 @@ export class TaskItemComponent implements OnInit {
 
   async changeTaskName(newName: string) {
     await this.tasksService.updateTask({ ...this.task, name: newName });
+    this.changeMode(false);
   }
 
   async changeTaskStatus() {
