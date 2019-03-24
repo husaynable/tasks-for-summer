@@ -1,5 +1,9 @@
 :host {
     padding: 20px 10px;
     border: 1px solid #eee;
-    display: block;
+    display: flex;
+}
+
+.item-name {
+  margin-left: 15px;
 }

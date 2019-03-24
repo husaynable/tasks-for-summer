@@ -1,6 +1,6 @@
-<div>
-  <mat-checkbox
-    [checked]="task.isFinished"
-    (change)="changeTaskStatus()"></mat-checkbox>
+<mat-checkbox
+  [checked]="task.isFinished"
+  (change)="changeTaskStatus()"></mat-checkbox>
+<div class="item-name">
   {{ task.name }}
 </div>
