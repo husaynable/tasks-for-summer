@@ -12,10 +12,15 @@
 
 .task-name-span {
   display: inline-block;
-  padding: 23.25px 0;
+  padding: 22.25px 0;
+  font-size: 16pt;
 }
 
 .mat-form-field {
   max-width: 100%;
   width: 100%;
+}
+
+.mat-input-element {
+  font-size: 16pt;
 }
