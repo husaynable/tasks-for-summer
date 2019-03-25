@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, HostBinding, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  HostBinding,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
 
@@ -14,10 +21,9 @@ export class TaskItemComponent implements OnInit {
 
   isEditing = false;
 
-  constructor(private tasksService: TasksService) { }
+  constructor(private tasksService: TasksService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   changeMode(mode: boolean) {
     this.isEditing = mode;
@@ -33,7 +39,10 @@ export class TaskItemComponent implements OnInit {
   }
 
   async changeTaskStatus() {
-    await this.tasksService.updateTask({ ...this.task, isFinished: !this.task.isFinished });
+    await this.tasksService.updateTask({
+      ...this.task,
+      isFinished: !this.task.isFinished
+    });
   }
 
   focusOnInput() {

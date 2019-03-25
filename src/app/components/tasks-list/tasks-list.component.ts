@@ -9,14 +9,12 @@ import { Task } from 'src/app/models/task.model';
   styleUrls: ['./tasks-list.component.css']
 })
 export class TasksListComponent implements OnInit {
-
   @HostBinding('class') class = 'app-tasks-list container';
   tasks: Observable<Task[]>;
 
-  constructor(private tasksService: TasksService) { }
+  constructor(private tasksService: TasksService) {}
 
   ngOnInit() {
     this.tasks = this.tasksService.getTasks();
   }
-
 }

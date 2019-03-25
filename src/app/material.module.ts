@@ -24,4 +24,4 @@ import { MatMenuModule } from '@angular/material/menu';
     MatMenuModule
   ]
 })
-export class MaterialModule { }
+export class MaterialModule {}

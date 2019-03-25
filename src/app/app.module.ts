@@ -13,11 +13,7 @@ import { environment } from '../environments/environment';
 import { MaterialModule } from './material.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TaskItemComponent,
-    TasksListComponent
-  ],
+  declarations: [AppComponent, TaskItemComponent, TasksListComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -29,4 +25,4 @@ import { MaterialModule } from './material.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
