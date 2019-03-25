@@ -11,9 +11,10 @@ import { TaskItemComponent } from './components/task-item/task-item.component';
 import { TasksListComponent } from './components/tasks-list/tasks-list.component';
 import { environment } from '../environments/environment';
 import { MaterialModule } from './material.module';
+import { TaskAdderComponent } from './components/task-adder/task-adder.component';
 
 @NgModule({
-  declarations: [AppComponent, TaskItemComponent, TasksListComponent],
+  declarations: [AppComponent, TaskItemComponent, TasksListComponent, TaskAdderComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
