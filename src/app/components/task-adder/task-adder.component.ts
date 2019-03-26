@@ -8,7 +8,8 @@ import {
   transition,
   trigger,
   query,
-  AnimationTriggerMetadata
+  AnimationTriggerMetadata,
+  keyframes
 } from '@angular/animations';
 
 @Component({
@@ -17,16 +18,22 @@ import {
   styleUrls: ['./task-adder.component.css'],
   animations: [
     trigger('expansion', [
-      state('void, hided', style({opacity: 0, transform: 'scale(0.7)'})),
-      state('showed', style({transform: 'none'})),
-      transition('* => showed', animate('150ms cubic-bezier(0, 0, 0.2, 1)',
-          style({transform: 'none', opacity: 1}))),
-      transition('* => void, * => hided',
-          animate('75ms cubic-bezier(0.4, 0.0, 0.2, 1)', style({opacity: 0})))
+      state('hided', style({ display: 'none', height: '0', width: '0', opacity: '0', transform: 'translateX(85vw)' })),
+      state('showed', style({ display: '*', height: '*', width: '*', opacity: '1' })),
+      transition('* => showed', animate('225ms ease-out', keyframes([
+        style({ display: '*', height: '*', width: '*', transform: 'translateX(85vw)', opacity: 0, offset: 0 }),
+        style({ display: '*', height: '*', width: '*', transform: 'translateX(42.5vw)', opacity: 0.5, offset: 0.5 }),
+        style({ display: '*', height: '*', width: '*', transform: 'translateX(0vw)', opacity: 1, offset: 1 })
+      ]))),
+      transition('* => hided', animate('225ms ease-out', keyframes([
+        style({ display: '*', height: '*', width: '*', offset: 0, opacity: 1 }),
+        style({ display: '*', height: '*', width: '*', transform: 'translateX(42.5vw)', offset: 0.5, opacity: 0.5 }),
+        style({ display: 'none', height: '0', width: '0', transform: 'translateX(85vw)', offset: 1, opacity: 0 })
+      ])))
     ]),
     trigger('applyBtnAppearance', [
       state('hided', style({ transform: 'translateX(0)' })),
-      state('showed', style({ transform: 'translateX(66px)' })),
+      state('showed', style({ transform: 'translateX(-66px)' })),
       transition('hided <=> showed', animate('225ms ease-out'))
     ])
   ]

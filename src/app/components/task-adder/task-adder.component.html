@@ -1,14 +1,15 @@
-<div class="input-wrapper mat-elevation-z1" [@expansion]="expansionState">
+<div class="input-wrapper mat-elevation-z1" *ngIf="expansionState" [@expansion]="expansionState">
   <mat-form-field appearance="outline">
     <mat-label>New Task</mat-label>
     <input matInput placeholder="Task" #taskInput />
   </mat-form-field>
 </div>
 <div class="actions-wrapper">
-  <button mat-fab (click)="toggle()" color="warn" class="toggleBtn">
-    <mat-icon>add</mat-icon>
+  <button mat-fab (click)="toggle()" color="primary" class="clear-btn" [@applyBtnAppearance]="expansionState">
+    <mat-icon>clear</mat-icon>
   </button>
-  <button mat-fab (click)="toggle()" color="primary" class="addBtn" [@applyBtnAppearance]="expansionState">
-    <mat-icon>done</mat-icon>
+  <button mat-fab (click)="toggle()" color="{{ expansionState === 'hided' ? 'accent' : 'primary' }}" class="add-done-btn">
+    <mat-icon *ngIf="expansionState === 'hided'">add</mat-icon>
+    <mat-icon *ngIf="expansionState === 'showed'">done</mat-icon>
   </button>
 </div>

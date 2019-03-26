@@ -4,7 +4,7 @@
   right: 5%;
   bottom: 8%;
   z-index: 200;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
 }
 
@@ -12,8 +12,9 @@
   padding: 1.7em 1.7em 0.8em 1.7em;
   border: 1px solid #eee;
   width: 70vw;
-  margin-right: 10px;
+  margin-right: 25px;
   background-color: white;
+  opacity: 0;
   /* box-sizing: border-box; */
 }
 
@@ -21,12 +22,12 @@
   position: relative;
 } */
 
-.addBtn {
+.clear-btn {
   position: relative;
-  left: -56px;
+  left: 56px;
 }
 
-.toggleBtn {
+.add-done-btn {
   z-index: 500;
 }
 
