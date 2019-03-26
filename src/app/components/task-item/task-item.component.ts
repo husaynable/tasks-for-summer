@@ -45,6 +45,10 @@ export class TaskItemComponent implements OnInit {
     });
   }
 
+  async deleteTask() {
+    await this.tasksService.delete(this.task.id);
+  }
+
   focusOnInput() {
     setTimeout(() => this.nameInput.nativeElement.focus(), 0);
   }

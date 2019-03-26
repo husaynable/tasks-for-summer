@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  AngularFirestoreCollection
+  AngularFirestoreCollection,
+  DocumentReference
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -29,9 +30,21 @@ export class TasksService {
     );
   }
 
+  addTask(task: Task): Promise<DocumentReference> {
+    return this.tasksCollection.add(task);
+  }
+
   updateTask(task: Task): Promise<void> {
-    console.log(task);
-    const taskDoc = this.db.doc<Task>(`tasks/${task.id}`);
+    const taskDoc = this.getDoc(task.id);
     return taskDoc.update(task);
+  }
+
+  delete(taskId: string): Promise<void> {
+    const taskDoc = this.getDoc(taskId);
+    return taskDoc.delete();
+  }
+
+  private getDoc(taskId: string) {
+    return this.db.doc<Task>(`tasks/${taskId}`);
   }
 }

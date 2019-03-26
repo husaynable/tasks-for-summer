@@ -11,6 +11,7 @@ import {
   AnimationTriggerMetadata,
   keyframes
 } from '@angular/animations';
+import { TasksService } from 'src/app/services/tasks.service';
 
 @Component({
   selector: 'app-task-adder',
@@ -40,7 +41,9 @@ import {
 })
 export class TaskAdderComponent implements OnInit {
   expansionState: 'hided' | 'showed' = 'hided';
-  constructor() {}
+  newTaskName: string;
+
+  constructor(private tasksService: TasksService) {}
 
   ngOnInit() {}
 
@@ -49,6 +52,16 @@ export class TaskAdderComponent implements OnInit {
       this.expansionState = 'showed';
     } else {
       this.expansionState = 'hided';
+    }
+  }
+
+  async addOrToggle() {
+    if (!this.newTaskName) {
+      this.toggle();
+    } else {
+      await this.tasksService.addTask({ name: this.newTaskName, isFinished: false });
+      this.newTaskName = null;
+      this.toggle();
     }
   }
 }
