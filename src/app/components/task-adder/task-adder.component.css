@@ -1,7 +1,7 @@
 :host {
   display: flex;
   position: fixed;
-  width: 100%;
+  right: 5%;
   bottom: 5%;
   z-index: 200;
   align-items: center;
@@ -11,7 +11,7 @@
 .input-wrapper {
   padding: 1.7em 1.7em 0.8em 1.7em;
   border: 1px solid #eee;
-  width: 60%;
+  width: 60vw;
   margin-right: 10px;
   background-color: white;
 }
