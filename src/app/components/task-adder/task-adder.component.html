@@ -1,7 +1,7 @@
 <div class="input-wrapper mat-elevation-z1" *ngIf="expansionState" [@expansion]="expansionState">
   <mat-form-field appearance="outline">
     <mat-label>New Task</mat-label>
-    <input matInput placeholder="Task" [(ngModel)]="newTaskName" #taskNameInput />
+    <input matInput placeholder="Task" [(ngModel)]="newTaskName" #taskNameInput (keyup.enter)="addOrToggle()" />
   </mat-form-field>
 </div>
 <div class="actions-wrapper">

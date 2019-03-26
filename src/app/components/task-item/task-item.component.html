@@ -4,7 +4,7 @@
 <div class="task-name">
   <span class="task-name-span" *ngIf="!isEditing">{{ task.name }}</span>
   <mat-form-field *ngIf="isEditing">
-    <input #nameInput placeholder="Введите задачу" matInput [value]="task.name" />
+    <input #nameInput placeholder="Введите задачу" matInput [value]="task.name" (keyup.enter)="changeTaskName(nameInput.value)" />
   </mat-form-field>
 </div>
 
