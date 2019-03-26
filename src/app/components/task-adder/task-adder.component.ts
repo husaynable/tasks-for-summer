@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {
   animate,
   animateChild,
@@ -12,6 +12,7 @@ import {
   keyframes
 } from '@angular/animations';
 import { TasksService } from 'src/app/services/tasks.service';
+import { focusOnInput } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-task-adder',
@@ -42,6 +43,7 @@ import { TasksService } from 'src/app/services/tasks.service';
 export class TaskAdderComponent implements OnInit {
   expansionState: 'hided' | 'showed' = 'hided';
   newTaskName: string;
+  @ViewChild('taskNameInput') taskNameInput: ElementRef;
 
   constructor(private tasksService: TasksService) {}
 
@@ -50,6 +52,7 @@ export class TaskAdderComponent implements OnInit {
   toggle() {
     if (this.expansionState === 'hided') {
       this.expansionState = 'showed';
+      focusOnInput(this.taskNameInput.nativeElement);
     } else {
       this.expansionState = 'hided';
     }

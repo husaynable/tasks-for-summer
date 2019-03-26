@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
+import { focusOnInput } from 'src/app/utils/functions';
 
 @Component({
   selector: 'app-task-item',
@@ -29,7 +30,7 @@ export class TaskItemComponent implements OnInit {
     this.isEditing = mode;
 
     if (mode) {
-      this.focusOnInput();
+      setTimeout(() => focusOnInput(this.nameInput.nativeElement), 0);
     }
   }
 
@@ -47,9 +48,5 @@ export class TaskItemComponent implements OnInit {
 
   async deleteTask() {
     await this.tasksService.delete(this.task.id);
-  }
-
-  focusOnInput() {
-    setTimeout(() => this.nameInput.nativeElement.focus(), 0);
   }
 }
