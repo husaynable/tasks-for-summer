@@ -1,9 +1,14 @@
-<div class="input-wrapper mat-elevation-z1">
+<div class="input-wrapper mat-elevation-z1" [@expansion]="expansionState">
   <mat-form-field appearance="outline">
     <mat-label>New Task</mat-label>
     <input matInput placeholder="Task" #taskInput />
   </mat-form-field>
 </div>
-<button mat-fab>
-  <mat-icon>add</mat-icon>
-</button>
+<div class="actions-wrapper">
+  <button mat-fab (click)="toggle()" color="warn" class="toggleBtn">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button mat-fab (click)="toggle()" color="primary" class="addBtn" [@applyBtnAppearance]="expansionState">
+    <mat-icon>done</mat-icon>
+  </button>
+</div>

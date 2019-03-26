@@ -2,7 +2,7 @@
   display: flex;
   position: fixed;
   right: 5%;
-  bottom: 5%;
+  bottom: 8%;
   z-index: 200;
   align-items: center;
   justify-content: center;
@@ -11,9 +11,23 @@
 .input-wrapper {
   padding: 1.7em 1.7em 0.8em 1.7em;
   border: 1px solid #eee;
-  width: 60vw;
+  width: 70vw;
   margin-right: 10px;
   background-color: white;
+  /* box-sizing: border-box; */
+}
+
+/* .actions-wrapper {
+  position: relative;
+} */
+
+.addBtn {
+  position: relative;
+  left: -56px;
+}
+
+.toggleBtn {
+  z-index: 500;
 }
 
 .mat-form-field {
