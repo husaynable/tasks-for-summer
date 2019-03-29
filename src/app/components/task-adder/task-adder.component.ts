@@ -1,14 +1,10 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {
   animate,
-  animateChild,
-  group,
   state,
   style,
   transition,
   trigger,
-  query,
-  AnimationTriggerMetadata,
   keyframes
 } from '@angular/animations';
 import { TasksService } from 'src/app/services/tasks.service';

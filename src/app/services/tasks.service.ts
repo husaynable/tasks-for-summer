@@ -15,7 +15,7 @@ export class TasksService {
   tasksCollection: AngularFirestoreCollection<Task>;
 
   constructor(private db: AngularFirestore) {
-    this.tasksCollection = db.collection<Task>('tasks');
+    this.tasksCollection = db.collection<Task>('tasks', ref => ref.orderBy('name'));
   }
 
   getTasks(): Observable<Task[]> {
@@ -45,6 +45,6 @@ export class TasksService {
   }
 
   private getDoc(taskId: string) {
-    return this.db.doc<Task>(`tasks/${taskId}`);
+    return this.tasksCollection.doc(taskId);
   }
 }
