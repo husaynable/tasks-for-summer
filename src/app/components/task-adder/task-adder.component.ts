@@ -46,6 +46,8 @@ export class TaskAdderComponent implements OnInit {
   ngOnInit() {}
 
   toggle() {
+    this.newTaskName = null;
+
     if (this.inputState === 'hidden') {
       this.inputState = 'visible';
       focusOnInput(this.taskNameInput.nativeElement);
