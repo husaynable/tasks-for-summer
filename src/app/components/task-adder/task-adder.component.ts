@@ -19,29 +19,25 @@ import { focusOnInput } from 'src/app/utils/functions';
   templateUrl: './task-adder.component.html',
   styleUrls: ['./task-adder.component.css'],
   animations: [
-    trigger('expansion', [
-      state('hided', style({ display: 'none', height: '0', width: '0', opacity: '0', transform: 'translateX(85vw)' })),
-      state('showed', style({ display: '*', height: '*', width: '*', opacity: '1' })),
-      transition('* => showed', animate('225ms ease-out', keyframes([
-        style({ display: '*', height: '*', width: '*', transform: 'translateX(85vw)', opacity: 0, offset: 0 }),
-        style({ display: '*', height: '*', width: '*', transform: 'translateX(42.5vw)', opacity: 0.5, offset: 0.5 }),
-        style({ display: '*', height: '*', width: '*', transform: 'translateX(0vw)', opacity: 1, offset: 1 })
+    trigger('inputState', [
+      state('initial, void, hidden', style({ opacity: '0', transform: 'scale(0)', width: '0', height: '0' })),
+      state('visible', style({ transform: 'scale(1)' })),
+      transition('* => visible', animate('225ms cubic-bezier(0, 0, 0.2, 1)', keyframes([
+        style({ transform: 'scale(0)', width: '*', height: '*',  opacity: 0, offset: 0 }),
+        style({ transform: 'scale(0.9)', opacity: 0.5, offset: 0.5 }),
+        style({ transform: 'scale(1)', opacity: 1, offset: 1 })
       ]))),
-      transition('* => hided', animate('225ms ease-out', keyframes([
-        style({ display: '*', height: '*', width: '*', offset: 0, opacity: 1 }),
-        style({ display: '*', height: '*', width: '*', transform: 'translateX(42.5vw)', offset: 0.5, opacity: 0.5 }),
-        style({ display: 'none', height: '0', width: '0', transform: 'translateX(85vw)', offset: 1, opacity: 0 })
-      ])))
+      transition('* => hidden', animate('225ms cubic-bezier(0, 0, 0.2, 1)', style({ opacity: 0 })))
     ]),
-    trigger('applyBtnAppearance', [
-      state('hided', style({ transform: 'translateX(0)' })),
-      state('showed', style({ transform: 'translateX(-66px)' })),
-      transition('hided <=> showed', animate('225ms ease-out'))
+    trigger('cancelBtnState', [
+      state('initial, void, hidden', style({ transform: 'translateX(0)', opacity: 0 })),
+      state('visible', style({ transform: 'translateX(-66px) rotate(180deg)' })),
+      transition('hidden <=> visible', animate('225ms cubic-bezier(0, 0, 0.2, 1)'))
     ])
   ]
 })
 export class TaskAdderComponent implements OnInit {
-  expansionState: 'hided' | 'showed' = 'hided';
+  inputState: 'hidden' | 'visible' = 'hidden';
   newTaskName: string;
   @ViewChild('taskNameInput') taskNameInput: ElementRef;
 
@@ -50,11 +46,11 @@ export class TaskAdderComponent implements OnInit {
   ngOnInit() {}
 
   toggle() {
-    if (this.expansionState === 'hided') {
-      this.expansionState = 'showed';
+    if (this.inputState === 'hidden') {
+      this.inputState = 'visible';
       focusOnInput(this.taskNameInput.nativeElement);
     } else {
-      this.expansionState = 'hided';
+      this.inputState = 'hidden';
     }
   }
 
