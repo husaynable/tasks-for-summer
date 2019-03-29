@@ -1,7 +1,7 @@
 <div class="input-wrapper mat-elevation-z1" [@inputState]="inputState">
   <mat-form-field appearance="outline">
     <mat-label>New Task</mat-label>
-    <input matInput placeholder="Task" [(ngModel)]="newTaskName" #taskNameInput (keyup.enter)="addOrToggle()" />
+    <input matInput placeholder="Task" [(ngModel)]="newTaskName" #taskNameInput (keyup.enter)="addOrToggle()" autocomplete="false" />
   </mat-form-field>
 </div>
 <div class="actions-wrapper">
