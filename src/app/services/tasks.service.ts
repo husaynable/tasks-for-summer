@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-  DocumentReference
+  DocumentReference,
+  AngularFirestoreDocument
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Task } from '../models/task.model';
+import { NotifierService } from 'angular-notifier';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ import { Task } from '../models/task.model';
 export class TasksService {
   tasksCollection: AngularFirestoreCollection<Task>;
 
-  constructor(private db: AngularFirestore) {
+  constructor(db: AngularFirestore, private notifier: NotifierService) {
     this.tasksCollection = db.collection<Task>('tasks', ref => ref.orderBy('name'));
   }
 
@@ -31,20 +33,23 @@ export class TasksService {
   }
 
   addTask(task: Task): Promise<DocumentReference> {
+    this.notifier.notify('success', 'New Task for Summer is added!');
     return this.tasksCollection.add(task);
   }
 
   updateTask(task: Task): Promise<void> {
+    this.notifier.notify('success', 'Task for Summer is updated!');
     const taskDoc = this.getDoc(task.id);
     return taskDoc.update(task);
   }
 
   delete(taskId: string): Promise<void> {
+    this.notifier.notify('success', 'Task for Summer is deleted!');
     const taskDoc = this.getDoc(taskId);
     return taskDoc.delete();
   }
 
-  private getDoc(taskId: string) {
+  private getDoc(taskId: string): AngularFirestoreDocument<Task> {
     return this.tasksCollection.doc(taskId);
   }
 }
