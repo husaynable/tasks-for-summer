@@ -14,6 +14,7 @@ import { TasksListComponent } from './components/tasks-list/tasks-list.component
 import { environment } from '../environments/environment';
 import { MaterialModule } from './material.module';
 import { TaskAdderComponent } from './components/task-adder/task-adder.component';
+import { LoginComponent } from './components/login/login.component';
 
 const notifierConfig: NotifierOptions = {
   position: {
@@ -30,7 +31,7 @@ const notifierConfig: NotifierOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent, TaskItemComponent, TasksListComponent, TaskAdderComponent],
+  declarations: [AppComponent, TaskItemComponent, TasksListComponent, TaskAdderComponent, LoginComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
