@@ -9,12 +9,11 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 
 import { AppComponent } from './app.component';
-import { TaskItemComponent } from './components/task-item/task-item.component';
-import { TasksListComponent } from './components/tasks-list/tasks-list.component';
 import { environment } from '../environments/environment';
 import { MaterialModule } from './material.module';
-import { TaskAdderComponent } from './components/task-adder/task-adder.component';
 import { LoginComponent } from './components/login/login.component';
+import { RouterModule } from '@angular/router';
+import { LoginGuard } from './guards/login.guard';
 
 const notifierConfig: NotifierOptions = {
   position: {
@@ -31,10 +30,14 @@ const notifierConfig: NotifierOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent, TaskItemComponent, TasksListComponent, TaskAdderComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    RouterModule.forRoot([
+      { path: '', loadChildren: './modules/tasks.module#TasksModule', canActivate: [LoginGuard] },
+      { path: 'login', component: LoginComponent }
+    ]),
     FormsModule,
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
