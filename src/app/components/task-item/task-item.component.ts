@@ -11,7 +11,7 @@ import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
 import { interval, Subject, Subscription } from 'rxjs';
-import { takeUntil, takeWhile } from 'rxjs/operators';
+import { takeUntil, takeWhile, filter, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-task-item',
@@ -29,11 +29,13 @@ export class TaskItemComponent implements OnInit {
 
   constructor(private tasksService: TasksService) {}
 
+  @HostListener('touchstart')
   @HostListener('mousedown')
   mouseDownListener() {
     if (!this.task.isFinished) {
       interval(50)
         .pipe(
+          filter(v => v > 4),
           takeUntil(this.progressStop$),
           takeWhile(() => this.holdingProgress <= 100)
         )
@@ -47,10 +49,11 @@ export class TaskItemComponent implements OnInit {
     }
   }
 
+  @HostListener('touchmove')
+  @HostListener('touchend')
   @HostListener('mouseup')
   mouseUpListener() {
     if (!this.task.isFinished) {
-      console.log('yeah, im fired');
       this.progressStop$.next();
       this.holdingProgress = 0;
     }
