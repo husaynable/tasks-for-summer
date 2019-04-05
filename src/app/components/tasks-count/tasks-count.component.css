@@ -1,0 +1,12 @@
+:host {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  display: flex;
+  justify-content: center;
+}
+
+span {
+  font-size: 36pt;
+  padding: 0 15px;
+}

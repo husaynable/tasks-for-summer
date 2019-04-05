@@ -8,13 +8,15 @@ import { TaskAdderComponent } from '../components/task-adder/task-adder.componen
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
 import { RouterModule } from '@angular/router';
+import { TasksCountComponent } from '../components/tasks-count/tasks-count.component';
 
 @NgModule({
   declarations: [
     TasksComponent,
     TaskItemComponent,
     TasksListComponent,
-    TaskAdderComponent
+    TaskAdderComponent,
+    TasksCountComponent
   ],
   imports: [
     CommonModule,
