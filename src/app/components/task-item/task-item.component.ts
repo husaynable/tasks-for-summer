@@ -5,7 +5,8 @@ import {
   HostBinding,
   ViewChild,
   ElementRef,
-  HostListener
+  HostListener,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
@@ -16,7 +17,8 @@ import { takeUntil, takeWhile, filter, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
-  styleUrls: ['./task-item.component.css']
+  styleUrls: ['./task-item.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskItemComponent implements OnInit {
   @ViewChild('nameInput') nameInput: ElementRef;
