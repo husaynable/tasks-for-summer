@@ -14,6 +14,7 @@ import { MaterialModule } from './material.module';
 import { LoginComponent } from './components/login/login.component';
 import { RouterModule } from '@angular/router';
 import { LoginGuard } from './guards/login.guard';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const notifierConfig: NotifierOptions = {
   position: {
@@ -43,7 +44,8 @@ const notifierConfig: NotifierOptions = {
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    NotifierModule.withConfig(notifierConfig)
+    NotifierModule.withConfig(notifierConfig),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
