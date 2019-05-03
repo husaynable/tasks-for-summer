@@ -9,7 +9,7 @@
   </mat-form-field>
 
   <span *ngIf="task.drunkDrinks && !isEditing" class="drinksWrapper">
-    <button mat-raised-button color="primary">Выпито {{ task.drunkDrinks.length }} напитков</button>
+    <button mat-raised-button color="primary" (click)="openItemsList()">Выпито {{ task.drunkDrinks.length }} напитков</button>
   </span>
 </div>
 

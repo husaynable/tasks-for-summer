@@ -15,6 +15,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RouterModule } from '@angular/router';
 import { LoginGuard } from './guards/login.guard';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ItemsListComponent } from './components/items-list/items-list.component';
 
 const notifierConfig: NotifierOptions = {
   position: {
@@ -31,7 +32,7 @@ const notifierConfig: NotifierOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, ItemsListComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -48,6 +49,7 @@ const notifierConfig: NotifierOptions = {
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ItemsListComponent]
 })
 export class AppModule {}

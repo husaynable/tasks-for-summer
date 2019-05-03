@@ -1,8 +1,8 @@
-import { Drink } from './drink.model';
+import { ItemModel } from './item.model';
 
 export interface Task {
   id?: string;
   name: string;
   isFinished: boolean;
-  drunkDrinks?: Drink[];
+  drunkDrinks?: ItemModel[];
 }

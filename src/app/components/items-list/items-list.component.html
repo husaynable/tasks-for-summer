@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{ data.caption }}</h2>
+
+<div mat-dialog-content>
+  <div *ngFor="let item of items; let i = index" class="item-wrapper">
+    <span>{{ item.name }}</span>
+    <div>
+      <span>{{ item.timestamp | date : 'MMM d' }}</span>
+      <button mat-icon-button (click)="deleteItem(i)">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="item-wrapper" *ngIf="isAdding">
+    <input type="text" #newItemInput />
+    <button mat-raised-button (click)="addItem(newItemInput.value)">OK</button>
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="isAdding = true">Add</button>
+  <button mat-raised-button (click)="close()">Close</button>
+</div>

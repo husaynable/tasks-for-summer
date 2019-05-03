@@ -13,6 +13,10 @@ import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
 import { interval, Subject, Subscription } from 'rxjs';
 import { takeUntil, takeWhile, filter, tap } from 'rxjs/operators';
+import { Drink } from 'src/app/models/drink.model';
+import { ItemModel } from 'src/app/models/item.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ItemsListComponent } from '../items-list/items-list.component';
 
 @Component({
   selector: 'app-task-item',
@@ -29,7 +33,7 @@ export class TaskItemComponent implements OnInit {
   holdingProgress: number;
   progressStop$ = new Subject<void>();
 
-  constructor(private tasksService: TasksService) {}
+  constructor(private tasksService: TasksService, private dialog: MatDialog) {}
 
   @HostListener('touchstart')
   @HostListener('mousedown')
@@ -73,6 +77,18 @@ export class TaskItemComponent implements OnInit {
     }
   }
 
+  openItemsList() {
+    if (this.task.drunkDrinks) {
+      const dialogRef = this.dialog.open(ItemsListComponent, {
+        width: '90%',
+        data: { caption: 'Drinks List', items: this.task.drunkDrinks }
+      });
+
+      dialogRef.afterClosed()
+        .subscribe(async (result: ItemModel[]) => await this.setDrunkDrinks(result));
+    }
+  }
+
   async changeTaskName(newName: string) {
     await this.tasksService.updateTask({ ...this.task, name: newName });
     this.changeMode(false);
@@ -87,5 +103,12 @@ export class TaskItemComponent implements OnInit {
 
   async deleteTask() {
     await this.tasksService.delete(this.task.id);
+  }
+
+  async setDrunkDrinks(drinks: ItemModel[]) {
+    await this.tasksService.updateTask({
+      ...this.task,
+      drunkDrinks: drinks
+    });
   }
 }
