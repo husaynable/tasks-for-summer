@@ -9,6 +9,9 @@
 .task-name {
   margin-left: 15px;
   flex: 1 1 auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
 }
 
 .task-name-span {

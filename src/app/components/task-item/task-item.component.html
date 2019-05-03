@@ -3,9 +3,14 @@
 
 <div class="task-name">
   <span class="task-name-span" *ngIf="!isEditing">{{ task.name }}</span>
+
   <mat-form-field *ngIf="isEditing">
     <input #nameInput placeholder="Введите задачу" matInput [value]="task.name" (keyup.enter)="changeTaskName(nameInput.value)" />
   </mat-form-field>
+
+  <span *ngIf="task.drunkDrinks && !isEditing" class="drinksWrapper">
+    <button mat-raised-button color="primary">Выпито {{ task.drunkDrinks.length }} напитков</button>
+  </span>
 </div>
 
 <!-- <div>{{ holdingProgress }}</div> -->

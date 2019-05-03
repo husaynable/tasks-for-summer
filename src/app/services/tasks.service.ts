@@ -26,6 +26,10 @@ export class TasksService {
         actions.map(a => {
           const data = a.payload.doc.data() as Task;
           const id = a.payload.doc.id;
+          if (data.drunkDrinks && data.drunkDrinks.length > 0) {
+            const drinks = data.drunkDrinks.map(d => d.timestamp = d.timestamp.toDate());
+            return { id, ...data, drinks };
+          }
           return { id, ...data };
         })
       )

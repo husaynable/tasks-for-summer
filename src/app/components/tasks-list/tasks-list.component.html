@@ -1,1 +1,4 @@
-<app-task-item *ngFor="let task of tasks | async" [task]="task"></app-task-item>
+<div [@listAnimation]="tasksLength">
+  <app-task-item *ngFor="let task of tasks | async; trackBy: trackTask" [task]="task">
+  </app-task-item>
+</div>
