@@ -8,9 +8,13 @@
     <input #nameInput placeholder="Введите задачу" matInput [value]="task.name" (keyup.enter)="changeTaskName(nameInput.value)" />
   </mat-form-field>
 
-  <span *ngIf="task.drunkDrinks && !isEditing" class="drinksWrapper">
-    <button mat-raised-button color="primary" (click)="openItemsList()">Выпито {{ task.drunkDrinks.length }} напитков</button>
+  <span *ngIf="task.drunkDrinks?.toString() && !isEditing" class="items-button">
+    <button mat-raised-button color="primary" (click)="openDrinksList()">Выпито {{ task.drunkDrinks }} напитков</button>
   </span>
+
+  <span *ngIf="task.watchedMovies?.toString() && !isEditing" class="items-button">
+      <button mat-raised-button color="primary" (click)="openMoviesList()">Просмотрено {{ task.watchedMovies }} фильмов</button>
+    </span>
 </div>
 
 <!-- <div>{{ holdingProgress }}</div> -->

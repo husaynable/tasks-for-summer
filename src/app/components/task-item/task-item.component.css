@@ -28,3 +28,13 @@
 .mat-input-element {
   font-size: 16pt;
 }
+
+@media(max-width: 700px) {
+  .task-name {
+    flex-direction: column;
+  }
+
+  .items-button {
+    align-self: flex-end;
+  }
+}

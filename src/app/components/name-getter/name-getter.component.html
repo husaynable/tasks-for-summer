@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <mat-label>Name</mat-label>
+    <input matInput #nameInput cdkFocusInitial placeholder="Name" />
+  </mat-form-field>
+</div>
+<div mat-dialog-acitons>
+  <button mat-button [mat-dialog-close]="nameInput.value">OK</button>
+  <button mat-button [mat-dialog-close]>Cancel</button>
+</div>

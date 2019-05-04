@@ -77,15 +77,35 @@ export class TaskItemComponent implements OnInit {
     }
   }
 
-  openItemsList() {
-    if (this.task.drunkDrinks) {
+  openDrinksList() {
+    if (this.task.drunkDrinks + '') {
       const dialogRef = this.dialog.open(ItemsListComponent, {
         width: '90%',
-        data: { caption: 'Drinks List', items: this.task.drunkDrinks }
+        data: { caption: 'Drinks List', itemsType: 'drinks' }
       });
 
       dialogRef.afterClosed()
-        .subscribe(async (result: ItemModel[]) => await this.setDrunkDrinks(result));
+        .subscribe(async (result: number) => {
+          if (this.task.drunkDrinks !== result) {
+            await this.setDrunkDrinks(result);
+          }
+        });
+    }
+  }
+
+  openMoviesList() {
+    if (this.task.watchedMovies + '') {
+      const dialogRef = this.dialog.open(ItemsListComponent, {
+        width: '90%',
+        data: { caption: 'Movies List', itemsType: 'movies' }
+      });
+
+      dialogRef.afterClosed()
+        .subscribe(async (result: number) => {
+          if (this.task.watchedMovies !== result) {
+            await this.setWatchedMovies(result);
+          }
+        });
     }
   }
 
@@ -105,10 +125,17 @@ export class TaskItemComponent implements OnInit {
     await this.tasksService.delete(this.task.id);
   }
 
-  async setDrunkDrinks(drinks: ItemModel[]) {
+  async setDrunkDrinks(drinks: number) {
     await this.tasksService.updateTask({
       ...this.task,
       drunkDrinks: drinks
+    });
+  }
+
+  async setWatchedMovies(movies: number) {
+    await this.tasksService.updateTask({
+      ...this.task,
+      watchedMovies: movies
     });
   }
 }

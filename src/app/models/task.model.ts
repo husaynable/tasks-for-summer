@@ -4,5 +4,6 @@ export interface Task {
   id?: string;
   name: string;
   isFinished: boolean;
-  drunkDrinks?: ItemModel[];
+  drunkDrinks?: number;
+  watchedMovies?: number;
 }

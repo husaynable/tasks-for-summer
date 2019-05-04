@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
 import { LoginGuard } from './guards/login.guard';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ItemsListComponent } from './components/items-list/items-list.component';
+import { NameGetterComponent } from './components/name-getter/name-getter.component';
 
 const notifierConfig: NotifierOptions = {
   position: {
@@ -32,7 +33,7 @@ const notifierConfig: NotifierOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, ItemsListComponent],
+  declarations: [AppComponent, LoginComponent, ItemsListComponent, NameGetterComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -50,6 +51,6 @@ const notifierConfig: NotifierOptions = {
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ItemsListComponent]
+  entryComponents: [ItemsListComponent, NameGetterComponent]
 })
 export class AppModule {}
