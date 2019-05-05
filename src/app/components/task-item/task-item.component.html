@@ -9,11 +9,11 @@
   </mat-form-field>
 
   <span *ngIf="task.drunkDrinks?.toString() && !isEditing" class="items-button">
-    <button mat-raised-button color="primary" (click)="openDrinksList()">Выпито {{ task.drunkDrinks }} напитков</button>
+    <button mat-raised-button color="primary" (click)="openDrinksList()">Drunk {{ task.drunkDrinks }} {{ task.drunkDrinks === 1 ? 'drink' : 'drinks' }}</button>
   </span>
 
   <span *ngIf="task.watchedMovies?.toString() && !isEditing" class="items-button">
-      <button mat-raised-button color="primary" (click)="openMoviesList()">Просмотрено {{ task.watchedMovies }} фильмов</button>
+      <button mat-raised-button color="primary" (click)="openMoviesList()">Watched {{ task.watchedMovies }} {{ task.watchedMovies === 1 ? 'movie' : 'movies' }}</button>
     </span>
 </div>
 
