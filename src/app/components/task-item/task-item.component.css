@@ -1,9 +1,23 @@
 :host {
+  position: relative;
   padding: 15px 10px;
   border: 1px solid #eee;
   display: flex;
   align-items: center;
   background-color: white;
+}
+
+:host > * :not(.fill-wrapper) {
+  z-index: 1;
+}
+
+.fill-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: limegreen;
+  box-shadow: #eee 0 0 10px 0 inset;
 }
 
 .task-name {

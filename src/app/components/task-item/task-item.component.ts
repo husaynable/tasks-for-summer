@@ -21,8 +21,7 @@ import { ItemsListComponent } from '../items-list/items-list.component';
 @Component({
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
-  styleUrls: ['./task-item.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./task-item.component.css']
 })
 export class TaskItemComponent implements OnInit {
   @ViewChild('nameInput') nameInput: ElementRef;
@@ -39,14 +38,14 @@ export class TaskItemComponent implements OnInit {
   @HostListener('mousedown')
   mouseDownListener() {
     if (!this.task.isFinished) {
-      interval(50)
+      interval(5)
         .pipe(
           filter(v => v > 4),
           takeUntil(this.progressStop$),
-          takeWhile(() => this.holdingProgress <= 100)
+          takeWhile(() => this.holdingProgress <= 95)
         )
         .subscribe(() => {
-          this.holdingProgress += 5;
+          this.holdingProgress += 1;
 
           if (this.holdingProgress === 100) {
             this.changeTaskStatus();
@@ -119,6 +118,10 @@ export class TaskItemComponent implements OnInit {
       ...this.task,
       isFinished: !this.task.isFinished
     });
+
+    if (!this.task.isFinished) {
+      this.holdingProgress = 0;
+    }
   }
 
   async deleteTask() {
