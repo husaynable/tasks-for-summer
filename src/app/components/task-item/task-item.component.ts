@@ -6,7 +6,12 @@ import {
   ViewChild,
   ElementRef,
   HostListener,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  OnChanges,
+  DoCheck,
+  ChangeDetectorRef,
+  OnDestroy,
+  AfterContentChecked
 } from '@angular/core';
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
@@ -23,26 +28,28 @@ import { ItemsListComponent } from '../items-list/items-list.component';
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.css']
 })
-export class TaskItemComponent implements OnInit {
+export class TaskItemComponent implements OnInit, OnDestroy {
   @ViewChild('nameInput') nameInput: ElementRef;
   @HostBinding('class') class = 'app-task-item mat-elevation-z2';
   @Input() task: Task;
 
   isEditing = false;
-  holdingProgress: number;
+  holdingProgress = 0;
   progressStop$ = new Subject<void>();
+
+  intervalSub$: Subscription;
 
   constructor(private tasksService: TasksService, private dialog: MatDialog) {}
 
-  @HostListener('touchstart')
-  @HostListener('mousedown')
-  mouseDownListener() {
+  @HostListener('touchstart', ['$event'])
+  @HostListener('mousedown', ['$event'])
+  mouseDownListener(e: any) {
     if (!this.task.isFinished) {
-      interval(5)
+      this.intervalSub$ = interval(1)
         .pipe(
-          filter(v => v > 4),
+          filter(v => v > 25),
           takeUntil(this.progressStop$),
-          takeWhile(() => this.holdingProgress <= 95)
+          takeWhile(() => this.holdingProgress <= 99)
         )
         .subscribe(() => {
           this.holdingProgress += 1;
@@ -83,12 +90,11 @@ export class TaskItemComponent implements OnInit {
         data: { caption: 'Drinks List', itemsType: 'drinks' }
       });
 
-      dialogRef.afterClosed()
-        .subscribe(async (result: number) => {
-          if (result !== undefined && this.task.drunkDrinks !== result) {
-            await this.setDrunkDrinks(result);
-          }
-        });
+      dialogRef.afterClosed().subscribe(async (result: number) => {
+        if (result !== undefined && this.task.drunkDrinks !== result) {
+          await this.setDrunkDrinks(result);
+        }
+      });
     }
   }
 
@@ -99,12 +105,11 @@ export class TaskItemComponent implements OnInit {
         data: { caption: 'Movies List', itemsType: 'movies' }
       });
 
-      dialogRef.afterClosed()
-        .subscribe(async (result: number) => {
-          if (result !== undefined && this.task.watchedMovies !== result) {
-            await this.setWatchedMovies(result);
-          }
-        });
+      dialogRef.afterClosed().subscribe(async (result: number) => {
+        if (result !== undefined && this.task.watchedMovies !== result) {
+          await this.setWatchedMovies(result);
+        }
+      });
     }
   }
 
@@ -121,6 +126,8 @@ export class TaskItemComponent implements OnInit {
 
     if (!this.task.isFinished) {
       this.holdingProgress = 0;
+    } else {
+      this.holdingProgress = 100;
     }
   }
 
@@ -140,5 +147,11 @@ export class TaskItemComponent implements OnInit {
       ...this.task,
       watchedMovies: movies
     });
+  }
+
+  ngOnDestroy() {
+    if (this.intervalSub$) {
+      this.intervalSub$.unsubscribe();
+    }
   }
 }
