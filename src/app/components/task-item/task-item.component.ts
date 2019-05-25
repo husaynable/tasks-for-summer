@@ -26,11 +26,11 @@ import { ItemsListComponent } from '../items-list/items-list.component';
 @Component({
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
-  styleUrls: ['./task-item.component.css']
+  styleUrls: ['./task-item.component.scss']
 })
 export class TaskItemComponent implements OnInit, OnDestroy {
   @ViewChild('nameInput') nameInput: ElementRef;
-  @HostBinding('class') class = 'app-task-item mat-elevation-z2';
+  @HostBinding('class') class = 'app-task-item mat-elevation-z1';
   @Input() task: Task;
 
   isEditing = false;
