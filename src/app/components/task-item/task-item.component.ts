@@ -29,7 +29,7 @@ import { ItemsListComponent } from '../items-list/items-list.component';
   styleUrls: ['./task-item.component.scss']
 })
 export class TaskItemComponent implements OnInit, OnDestroy {
-  @ViewChild('nameInput') nameInput: ElementRef;
+  @ViewChild('nameInput', { static: false }) nameInput: ElementRef;
   @HostBinding('class') class = 'app-task-item mat-elevation-z1';
   @Input() task: Task;
 
