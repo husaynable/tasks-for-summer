@@ -38,7 +38,11 @@ const notifierConfig: NotifierOptions = {
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      { path: '', loadChildren: './modules/tasks.module#TasksModule', canActivate: [LoginGuard] },
+      {
+        path: '',
+        loadChildren: () => import('./modules/tasks.module').then(m => m.TasksModule),
+        canActivate: [LoginGuard]
+      },
       { path: 'login', component: LoginComponent }
     ]),
     FormsModule,
