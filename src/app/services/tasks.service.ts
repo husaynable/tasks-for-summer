@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Task } from '../models/task.model';
 import { NotifierService } from 'angular-notifier';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class TasksService {
   tasksCollection: AngularFirestoreCollection<Task>;
 
   constructor(db: AngularFirestore, private notifier: NotifierService) {
-    this.tasksCollection = db.collection<Task>('tasks-test', ref => ref.orderBy('name'));
+    this.tasksCollection = db.collection<Task>(environment.collectionName, ref => ref.orderBy('name'));
   }
 
   getTasks(): Observable<Task[]> {
