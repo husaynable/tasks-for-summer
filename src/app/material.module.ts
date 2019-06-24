@@ -8,6 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 const modules = [
   MatCheckboxModule,
@@ -18,7 +19,8 @@ const modules = [
   MatMenuModule,
   MatCardModule,
   MatDialogModule,
-  MatListModule
+  MatListModule,
+  OverlayModule
 ];
 
 @NgModule({

@@ -17,6 +17,7 @@ import { LoginGuard } from './guards/login.guard';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ItemsListComponent } from './components/items-list/items-list.component';
 import { NameGetterComponent } from './components/name-getter/name-getter.component';
+import { FedCatsCounterComponent } from './components/fed-cats-counter/fed-cats-counter.component';
 
 const notifierConfig: NotifierOptions = {
   position: {
@@ -33,7 +34,7 @@ const notifierConfig: NotifierOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, ItemsListComponent, NameGetterComponent],
+  declarations: [AppComponent, LoginComponent, ItemsListComponent, NameGetterComponent, FedCatsCounterComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -55,6 +56,6 @@ const notifierConfig: NotifierOptions = {
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ItemsListComponent, NameGetterComponent]
+  entryComponents: [ItemsListComponent, NameGetterComponent, FedCatsCounterComponent]
 })
 export class AppModule {}
