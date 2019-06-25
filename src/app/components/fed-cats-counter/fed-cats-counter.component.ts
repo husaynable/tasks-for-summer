@@ -1,7 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { OverlayRef } from '@angular/cdk/overlay';
 import { FED_CATS_COUNT } from 'src/app/services/fed-cats-counter-overlay.service';
-import { TasksService } from 'src/app/services/tasks.service';
 import { FedCatsCounterOverlayRef } from 'src/app/services/fed-cats-counter-overlay-ref';
 
 @Component({
@@ -12,11 +10,7 @@ import { FedCatsCounterOverlayRef } from 'src/app/services/fed-cats-counter-over
 export class FedCatsCounterComponent implements OnInit {
   catsCount: number;
 
-  constructor(
-    private dialogRef: FedCatsCounterOverlayRef,
-    @Inject(FED_CATS_COUNT) private fedCatsCount: number,
-    private tasksService: TasksService
-  ) {}
+  constructor(private dialogRef: FedCatsCounterOverlayRef, @Inject(FED_CATS_COUNT) private fedCatsCount: number) {}
 
   ngOnInit() {
     this.catsCount = this.fedCatsCount;
@@ -37,7 +31,7 @@ export class FedCatsCounterComponent implements OnInit {
   }
 
   subtract() {
-    if (this.catsCount >= 0) {
+    if (this.catsCount > 0) {
       this.catsCount -= 1;
     }
   }

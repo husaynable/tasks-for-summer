@@ -1,25 +1,9 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  HostBinding,
-  ViewChild,
-  ElementRef,
-  HostListener,
-  ChangeDetectionStrategy,
-  OnChanges,
-  DoCheck,
-  ChangeDetectorRef,
-  OnDestroy,
-  AfterContentChecked
-} from '@angular/core';
+import { Component, OnInit, Input, HostBinding, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
 import { interval, Subject, Subscription } from 'rxjs';
-import { takeUntil, takeWhile, filter, tap } from 'rxjs/operators';
-import { Drink } from 'src/app/models/drink.model';
-import { ItemModel } from 'src/app/models/item.model';
+import { takeUntil, takeWhile, filter } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemsListComponent } from '../items-list/items-list.component';
 import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-overlay.service';
@@ -49,7 +33,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
   @HostListener('touchstart', ['$event'])
   @HostListener('mousedown', ['$event'])
-  mouseDownListener(e: any) {
+  mouseDownListener() {
     if (!this.task.isFinished) {
       this.intervalSub$ = interval(1)
         .pipe(
@@ -122,7 +106,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   openFedCatsCounter(matBtn: MatButton) {
     const dialogRef = this.fedCatsCounterService.open(matBtn._elementRef, this.task.countOfFedCats);
     dialogRef.aftefClosed.subscribe(fedCatsCount => {
-      if (fedCatsCount) {
+      if (fedCatsCount !== undefined && this.task.countOfFedCats !== fedCatsCount) {
         const newTask = { ...this.task, countOfFedCats: fedCatsCount } as Task;
         this.tasksService.updateTask(newTask);
       }
