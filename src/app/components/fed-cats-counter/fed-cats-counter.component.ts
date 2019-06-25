@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { OverlayRef } from '@angular/cdk/overlay';
+import { FED_CATS_COUNT } from 'src/app/services/fed-cats-counter-overlay.service';
+import { TasksService } from 'src/app/services/tasks.service';
+import { FedCatsCounterOverlayRef } from 'src/app/services/fed-cats-counter-overlay-ref';
 
 @Component({
   selector: 'app-fed-cats-counter',
@@ -6,7 +10,35 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fed-cats-counter.component.css']
 })
 export class FedCatsCounterComponent implements OnInit {
-  constructor() {}
+  catsCount: number;
 
-  ngOnInit() {}
+  constructor(
+    private dialogRef: FedCatsCounterOverlayRef,
+    @Inject(FED_CATS_COUNT) private fedCatsCount: number,
+    private tasksService: TasksService
+  ) {}
+
+  ngOnInit() {
+    this.catsCount = this.fedCatsCount;
+  }
+
+  save() {
+    this.dialogRef.close(this.catsCount);
+  }
+
+  cancel() {
+    this.dialogRef.close();
+  }
+
+  add() {
+    if (this.catsCount <= 100) {
+      this.catsCount += 1;
+    }
+  }
+
+  subtract() {
+    if (this.catsCount >= 0) {
+      this.catsCount -= 1;
+    }
+  }
 }

@@ -120,7 +120,13 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   }
 
   openFedCatsCounter(matBtn: MatButton) {
-    const overlayRef = this.fedCatsCounterService.open(matBtn._elementRef);
+    const dialogRef = this.fedCatsCounterService.open(matBtn._elementRef, this.task.countOfFedCats);
+    dialogRef.aftefClosed.subscribe(fedCatsCount => {
+      if (fedCatsCount) {
+        const newTask = { ...this.task, countOfFedCats: fedCatsCount } as Task;
+        this.tasksService.updateTask(newTask);
+      }
+    });
   }
 
   async changeTaskName(newName: string) {
