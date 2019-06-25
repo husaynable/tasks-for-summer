@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  collectionName: 'tasks',
+  collectionName: 'tasks-test',
   production: false,
   firebaseConfig: {
     apiKey: 'AIzaSyC1yPC5_Q_0iHUlu5O3QCIlY2vD5BktvLM',

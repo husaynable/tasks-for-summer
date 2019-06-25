@@ -22,6 +22,8 @@ import { Drink } from 'src/app/models/drink.model';
 import { ItemModel } from 'src/app/models/item.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemsListComponent } from '../items-list/items-list.component';
+import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-overlay.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-task-item',
@@ -39,7 +41,11 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
   intervalSub$: Subscription;
 
-  constructor(private tasksService: TasksService, private dialog: MatDialog) {}
+  constructor(
+    private tasksService: TasksService,
+    private dialog: MatDialog,
+    private fedCatsCounterService: FedCatsCounterOverlayService
+  ) {}
 
   @HostListener('touchstart', ['$event'])
   @HostListener('mousedown', ['$event'])
@@ -111,6 +117,10 @@ export class TaskItemComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  openFedCatsCounter(matBtn: MatButton) {
+    const overlayRef = this.fedCatsCounterService.open(matBtn._elementRef);
   }
 
   async changeTaskName(newName: string) {
