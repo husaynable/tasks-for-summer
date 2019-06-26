@@ -1,10 +1,9 @@
-import { Injectable, ElementRef, InjectionToken, Injector } from '@angular/core';
-import { Overlay, ConnectionPositionPair, OverlayRef } from '@angular/cdk/overlay';
+import { Injectable, ElementRef, Injector } from '@angular/core';
+import { Overlay, ConnectionPositionPair } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
 import { FedCatsCounterComponent } from '../components/fed-cats-counter/fed-cats-counter.component';
 import { FedCatsCounterOverlayRef } from './fed-cats-counter-overlay-ref';
-
-export const FED_CATS_COUNT = new InjectionToken<number>('FED_CATS_COUNT');
+import { FED_CATS_COUNT } from '../utils/injection-tokens';
 
 @Injectable({
   providedIn: 'root'
