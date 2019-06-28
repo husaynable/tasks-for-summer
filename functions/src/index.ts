@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-// admin.initializeApp();
+admin.initializeApp();
 
 interface DocData {
   docPath: string;
@@ -8,11 +8,11 @@ interface DocData {
 }
 
 const values: { [name: string]: DocData } = {
-  movies: {
+  drinks: {
     docPath: '/tasks-test/48K5RTbAc5vbNwcDSyGu',
     fieldName: 'drunkDrinks'
   },
-  drinks: {
+  movies: {
     docPath: '/tasks-test/cwgY884Viawk4zXwp8iR',
     fieldName: 'watchedMovies'
   }
@@ -21,7 +21,11 @@ const values: { [name: string]: DocData } = {
 const doEverithing = async ({ docPath, fieldName }: DocData, operation: '+' | '-') => {
   const doc = admin.firestore().doc(docPath);
   const currCount = ((await doc.get()).data() as FirebaseFirestore.DocumentData)[fieldName];
-  await doc.update({ fieldName: currCount + 1 });
+  if (operation === '+') {
+    await doc.update({ [fieldName]: currCount + 1 });
+  } else if (operation === '-') {
+    await doc.update({ [fieldName]: currCount - 1 });
+  }
 };
 
 export const onCreate = functions.firestore.document('/items/{itemId}').onCreate(async (snap, context) => {
@@ -31,6 +35,12 @@ export const onCreate = functions.firestore.document('/items/{itemId}').onCreate
   }
 });
 
+export const onDelete = functions.firestore.document('/items/{itemId}').onDelete(async (snap, context) => {
+  if (snap.data()) {
+    const snapData = snap.data() as FirebaseFirestore.DocumentData;
+    await doEverithing(values[snapData.type], '-');
+  }
+});
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
