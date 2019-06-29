@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
 import { RouterModule } from '@angular/router';
 import { TasksCountComponent } from '../components/tasks-count/tasks-count.component';
+import { PictureTakerComponent } from '../components/picture-taker/picture-taker.component';
 
 @NgModule({
   declarations: [
@@ -16,15 +17,15 @@ import { TasksCountComponent } from '../components/tasks-count/tasks-count.compo
     TaskItemComponent,
     TasksListComponent,
     TaskAdderComponent,
-    TasksCountComponent
+    TasksCountComponent,
+    PictureTakerComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule.forChild([
-      { path: '', component: TasksComponent }
-    ]),
+    RouterModule.forChild([{ path: '', component: TasksComponent }]),
     MaterialModule
-  ]
+  ],
+  entryComponents: [PictureTakerComponent]
 })
 export class TasksModule {}
