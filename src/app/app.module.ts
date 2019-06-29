@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 
 import { AppComponent } from './app.component';
@@ -51,6 +52,7 @@ const notifierConfig: NotifierOptions = {
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
     NotifierModule.withConfig(notifierConfig),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

@@ -5,7 +5,7 @@
   </mat-form-field>
 </div>
 <div mat-dialog-acitons>
-  <button mat-button (click)="takePic()">Take Pic</button>
+  <button mat-button *ngIf="hasMediaDevice" (click)="takePic()">Take Pic</button>
   <button mat-button [mat-dialog-close]="nameInput.value">OK</button>
   <button mat-button [mat-dialog-close]>Cancel</button>
 </div>

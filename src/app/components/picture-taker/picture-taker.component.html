@@ -1,4 +1,4 @@
-<div><video #video id="video" width="480" height="480" autoplay></video></div>
-<div><button (click)="capture()">Take Photo</button></div>
-<canvas #canvas id="canvas" width="480" height="480"></canvas>
-
+<div><video #video id="video" width="{{ photoWidth }}" height="{{ photoHeight }}" autoplay></video></div>
+<div><button (click)="capture()" mat-button>Take Photo</button></div>
+<button mat-button [mat-dialog-close]>Close</button>
+<canvas #canvas id="canvas" width="{{ photoWidth }}" height="{{ photoHeight }}"></canvas>
