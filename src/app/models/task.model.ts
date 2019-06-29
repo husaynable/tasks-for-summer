@@ -6,4 +6,5 @@ export interface Task {
   isFinished: boolean;
   drunkDrinks?: number;
   watchedMovies?: number;
+  countOfFedCats?: number;
 }

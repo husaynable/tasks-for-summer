@@ -1,11 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
-@import "./material.theme.scss";
-@import "~angular-notifier/styles.css";
+@import './material.theme.scss';
+@import '~angular-notifier/styles.css';
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", 'Times New Roman', Times, serif;
+  font-family: 'Roboto', 'Times New Roman', Times, serif;
   background-color: mat-color($app-primary);
 }
 
@@ -14,6 +14,10 @@ body {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+}
+
+.black-back {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 @media (min-width: 768px) {

@@ -16,7 +16,11 @@
 
   <span *ngIf="task.watchedMovies?.toString() && !isEditing" class="items-button">
       <button mat-raised-button color="primary" (click)="openMoviesList()">Watched {{ task.watchedMovies }} {{ task.watchedMovies === 1 ? 'movie' : 'movies' }}</button>
-    </span>
+  </span>
+
+  <span *ngIf="task.countOfFedCats?.toString() && !isEditing" class="items-button">
+    <button mat-raised-button color="primary" #fedCatsBtn (click)="openFedCatsCounter(fedCatsBtn)">Fed {{ task.countOfFedCats }} cats</button>
+  </span>
 </div>
 
 <!-- <div>{{ holdingProgress }}</div> -->

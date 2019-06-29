@@ -22,15 +22,7 @@ export class TasksService {
   }
 
   getTasks(): Observable<Task[]> {
-    return this.tasksCollection.snapshotChanges().pipe(
-      map(actions =>
-        actions.map(a => {
-          const data = a.payload.doc.data() as Task;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        })
-      )
-    );
+    return this.tasksCollection.valueChanges({ idField: 'id' });
   }
 
   addTask(task: Task): Promise<DocumentReference> {
