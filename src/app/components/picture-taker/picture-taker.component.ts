@@ -19,6 +19,7 @@ export class PictureTakerComponent implements AfterViewInit {
 
   public hasSecondCamera = false;
   private mode: CameraMode = CameraMode.Environment;
+  public isPrewievMode = false;
 
   public photoHeight = 640;
   public photoWidth = 480;
@@ -43,32 +44,38 @@ export class PictureTakerComponent implements AfterViewInit {
   }
 
   capture() {
+    const videoEl = this.video.nativeElement as HTMLVideoElement;
     const context = this.canvas.nativeElement
       .getContext('2d')
-      .drawImage(this.video.nativeElement, 0, 0, this.photoWidth, this.photoHeight);
-    const url = this.canvas.nativeElement.toDataURL('image/png', 1.0);
-    const a = document.createElement('a');
-    a.target = '_blank';
-    a.href = url;
-    a.download = 'photo.png';
-    a.click();
+      .drawImage(videoEl, 0, 0, videoEl.videoWidth, videoEl.videoHeight);
+    // videoEl.videoWidth = 480;
+    // this.isPrewievMode = true;
+    const dataUrl = this.canvas.nativeElement.toDataURL('image/png', 1.0);
+    // const a = document.createElement('a');
+    // a.target = '_blank';
+    // a.href = url;
+    // a.download = 'photo.png';
+    // a.click();
 
-    //const imgBlob = b64toBlob();
+    const imgBlob = b64toBlob(dataUrl.split(',')[1], 'image/png');
 
-    // const id = `f${(+new Date).toString(16)}`;
-    // const imageRef = this.storage.ref(`drinks/${id}.png` );
-    // const imageUploadTask = imageRef.put(imgBlob);
-    // imageUploadTask.snapshotChanges().pipe(
-    //   finalize(() => {
-    //     imageRef.getDownloadURL().subscribe(url => {
-    //       const a = document.createElement('a');
-    //       a.target = '_blank';
-    //       a.href = url;
-    //       a.download = 'photo.png';
-    //       a.click();
-    //     });
-    //   })
-    // ).subscribe();
+    const id = `f${(+new Date()).toString(16)}`;
+    const imageRef = this.storage.ref(`drinks/${id}.png`);
+    const imageUploadTask = imageRef.put(imgBlob);
+    imageUploadTask
+      .snapshotChanges()
+      .pipe(
+        finalize(() => {
+          imageRef.getDownloadURL().subscribe(url => {
+            const a = document.createElement('a');
+            a.target = '_blank';
+            a.href = url;
+            a.download = 'photo.png';
+            a.click();
+          });
+        })
+      )
+      .subscribe();
     // console.log(this.canvas.nativeElement.toDataURL('image/png'));
   }
 }

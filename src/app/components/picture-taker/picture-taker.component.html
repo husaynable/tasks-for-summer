@@ -1,4 +1,12 @@
-<div><video #video id="video" width="{{ photoWidth }}" height="{{ photoHeight }}" autoplay></video></div>
-<div><button (click)="capture()" mat-button>Take Photo</button></div>
-<button mat-button [mat-dialog-close]>Close</button>
-<canvas #canvas id="canvas" width="{{ photoWidth }}" height="{{ photoHeight }}"></canvas>
+<div mat-dialog-content>
+  <video #video [hidden]="isPrewievMode" id="video" width="{{ photoWidth }}" height="{{ photoHeight }}" autoplay></video>
+  <canvas [hidden]="!isPrewievMode" #canvas id="canvas" [width]="video.videoWidth" [height]="video.videoHeight"></canvas>
+  <div *ngIf="isPrewievMode">
+    <button mat-button>Apply</button>
+    <button mat-button (click)="isPrewievMode = false">Cancel</button>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button *ngIf="!isPrewievMode" (click)="capture()" mat-button>Take Photo</button>
+  <button mat-button [mat-dialog-close]>Close</button>
+</div>
