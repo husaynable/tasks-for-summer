@@ -7,6 +7,11 @@
   min-height: 250px;
 }
 
+.mat-dialog-actions {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .mat-form-field {
   width: 90%;
 }

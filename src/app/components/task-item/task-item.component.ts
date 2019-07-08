@@ -82,7 +82,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
       dialogRef.afterClosed().subscribe(async (result: number) => {
         if (result !== undefined && this.task.drunkDrinks !== result) {
-          await this.setDrunkDrinks(result);
+          // await this.setDrunkDrinks(result);
         }
       });
     }
@@ -97,7 +97,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
       dialogRef.afterClosed().subscribe(async (result: number) => {
         if (result !== undefined && this.task.watchedMovies !== result) {
-          await this.setWatchedMovies(result);
+          // await this.setWatchedMovies(result);
         }
       });
     }

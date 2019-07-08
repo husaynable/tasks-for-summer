@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection
-} from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { ItemModel } from '../models/item.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,7 +17,7 @@ export class ItemsService {
 
   getItems(itemsType: 'drinks' | 'movies'): Observable<ItemModel[]> {
     return this.db
-      .collection('items', ref => ref.where('type', '==', itemsType))
+      .collection('items', ref => ref.where('type', '==', itemsType).orderBy('timestamp'))
       .snapshotChanges()
       .pipe(
         map(actions =>

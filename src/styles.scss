@@ -20,6 +20,10 @@ body {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.lightgray-back {
+  background-color: #efefef;
+}
+
 @media (min-width: 768px) {
   .container {
     width: 750px;

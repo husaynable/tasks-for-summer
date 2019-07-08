@@ -2,7 +2,7 @@
 
 <div mat-dialog-content *ngIf="itemsCount > 0">
   <mat-list>
-    <mat-list-item *ngFor="let item of items | async">
+    <mat-list-item *ngFor="let item of items | async; let odd = odd" [class.lightgray-back]="odd">
       <button mat-icon-button (click)="deleteItem(item.id)">
         <mat-icon>clear</mat-icon>
       </button>
@@ -16,8 +16,8 @@
   <div class="center-text gray-text"><i>There's no {{ data.itemsType }}</i></div>
 </div>
 
-<button mat-button style="width: 100%" (click)="openNameGetter()">Add</button>
 
 <div mat-dialog-actions>
-  <button mat-raised-button (click)="close()">Close</button>
+  <button mat-button style="width: 100%" (click)="openNameGetter()">Add</button>
+  <button mat-raised-button (click)="close()" style="margin-top: 10px">Close</button>
 </div>
