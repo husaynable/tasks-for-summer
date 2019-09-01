@@ -4,6 +4,9 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { ItemsService } from 'src/app/services/items.service';
 import { Observable, Subscription } from 'rxjs';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
+import { CreateItemModel } from 'src/app/models/create-item.model';
+import { StorageService } from 'src/app/services/storage.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-items-list',
@@ -20,14 +23,15 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA)
     public data: { caption: string; itemsType: 'drinks' | 'movies' },
     private itemsService: ItemsService,
-    private modal: MatDialog
+    private modal: MatDialog,
+    private storageService: StorageService
   ) {}
 
   ngOnInit() {
     this.items = this.itemsService.getItems(this.data.itemsType);
     this.itemsCountSub$ = this.itemsService
       .getItems(this.data.itemsType)
-      .subscribe(items => this.itemsCount = items.length);
+      .subscribe(items => (this.itemsCount = items.length));
   }
 
   openNameGetter() {
@@ -35,14 +39,22 @@ export class ItemsListComponent implements OnInit, OnDestroy {
       width: '400px'
     });
 
-    dialogRef.afterClosed().subscribe(name => {
-      if (name) {
-        this.addItem(name);
+    dialogRef.afterClosed().subscribe((newItem: CreateItemModel) => {
+      if (newItem && newItem.name) {
+        if (newItem.pic) {
+          this.storageService
+            .updload(newItem.pic)
+            .snapshotChanges()
+            .pipe(finalize(() => {}));
+        }
+        if (name) {
+          this.addItem(name);
+        }
       }
     });
   }
 
-  addItem(name: string) {
+  addItem(name: string, attachUrl: string) {
     const newItem: ItemModel = {
       name,
       timestamp: new Date(),
