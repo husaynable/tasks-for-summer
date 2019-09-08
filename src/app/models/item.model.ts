@@ -3,4 +3,5 @@ export interface ItemModel {
   name: string;
   timestamp: any;
   type: 'drinks' | 'movies';
+  attachmentUrl?: string;
 }

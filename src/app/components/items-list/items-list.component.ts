@@ -23,8 +23,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA)
     public data: { caption: string; itemsType: 'drinks' | 'movies' },
     private itemsService: ItemsService,
-    private modal: MatDialog,
-    private storageService: StorageService
+    private modal: MatDialog
   ) {}
 
   ngOnInit() {
@@ -41,25 +40,24 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((newItem: CreateItemModel) => {
       if (newItem && newItem.name) {
-        if (newItem.pic) {
-          this.storageService
-            .updload(newItem.pic)
-            .snapshotChanges()
-            .pipe(finalize(() => {}));
-        }
-        if (name) {
-          this.addItem(name);
+        if (newItem.picUrl) {
+          this.addItem(newItem.name, newItem.picUrl);
+        } else {
+          this.addItem(newItem.name);
         }
       }
     });
   }
 
-  addItem(name: string, attachUrl: string) {
+  addItem(name: string, attachUrl?: string) {
     const newItem: ItemModel = {
       name,
       timestamp: new Date(),
       type: this.data.itemsType
     };
+    if (attachUrl) {
+      newItem.attachmentUrl = attachUrl;
+    }
     this.itemsService.addItem(newItem);
   }
 

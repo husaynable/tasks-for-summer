@@ -8,6 +8,7 @@
       </button>
       <h3 mat-line>{{ item.name }}</h3>
       <p mat-line>{{ item.timestamp | date : 'MMM d' }}</p>
+      <a mat-line *ngIf="item.attachmentUrl" [href]="item.attachmentUrl" target="_blank">Show Attachment</a>
     </mat-list-item>
   </mat-list>
 </div>
