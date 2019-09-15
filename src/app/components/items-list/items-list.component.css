@@ -3,6 +3,33 @@
   justify-content: space-between;
 }
 
+.list-item {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  justify-content: space-between;
+}
+
+.list-item-caption {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+
+.list-item-caption-header {
+  font-size: 14pt;
+  margin-bottom: 10px;
+}
+
+.list-item-caption-date {
+  color: #666;
+  font-size: 11pt
+}
+
+.list-item-actions {
+  margin-right: 15px;
+}
+
 .mat-dialog-content {
   min-height: 250px;
 }

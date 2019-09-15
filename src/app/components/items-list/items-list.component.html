@@ -1,21 +1,25 @@
 <h2 mat-dialog-title>{{ data.caption }}</h2>
 
-<div mat-dialog-content *ngIf="itemsCount > 0">
-  <mat-list>
-    <mat-list-item *ngFor="let item of items | async; let odd = odd" [class.lightgray-back]="odd">
+<div mat-dialog-content *ngIf="items$ | async as items; else noItems">
+  <div class="list-item" *ngFor="let item of items; let odd = odd" [class.lightgray-back]="odd">
+    <span class="list-item-caption">
+      <div class="list-item-caption-header">{{ item.name }}</div>
+      <div class="list-item-caption-date">{{ item.timestamp | date : 'MMM d' }}</div>
+    </span>
+    <span class="list-item-actions">
+      <a *ngIf="item.attachmentUrl" [href]="item.attachmentUrl" target="_blank">Show Attachment</a>
       <button mat-icon-button (click)="deleteItem(item.id)">
         <mat-icon>clear</mat-icon>
       </button>
-      <h3 mat-line>{{ item.name }}</h3>
-      <p mat-line>{{ item.timestamp | date : 'MMM d' }}</p>
-      <a mat-line *ngIf="item.attachmentUrl" [href]="item.attachmentUrl" target="_blank">Show Attachment</a>
-    </mat-list-item>
-  </mat-list>
+    </span>
+  </div>
 </div>
 
-<div mat-dialog-content *ngIf="!itemsCount">
-  <div class="center-text gray-text"><i>There's no {{ data.itemsType }}</i></div>
-</div>
+<ng-template #noItems>
+  <div mat-dialog-content>
+    <div class="center-text gray-text"><i>There's no {{ data.itemsType }}</i></div>
+  </div>
+</ng-template>
 
 
 <div mat-dialog-actions>

@@ -1,22 +1,18 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ItemModel } from 'src/app/models/item.model';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { ItemsService } from 'src/app/services/items.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { CreateItemModel } from 'src/app/models/create-item.model';
-import { StorageService } from 'src/app/services/storage.service';
-import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-items-list',
   templateUrl: './items-list.component.html',
   styleUrls: ['./items-list.component.css']
 })
-export class ItemsListComponent implements OnInit, OnDestroy {
-  items: Observable<ItemModel[]>;
-  itemsCount: number;
-  itemsCountSub$: Subscription;
+export class ItemsListComponent implements OnInit {
+  items$: Observable<ItemModel[]>;
 
   constructor(
     public dialogRef: MatDialogRef<ItemsListComponent>,
@@ -27,10 +23,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.items = this.itemsService.getItems(this.data.itemsType);
-    this.itemsCountSub$ = this.itemsService
-      .getItems(this.data.itemsType)
-      .subscribe(items => (this.itemsCount = items.length));
+    this.items$ = this.itemsService.getItems(this.data.itemsType);
   }
 
   openNameGetter() {
@@ -66,12 +59,6 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this.dialogRef.close(this.itemsCount);
-  }
-
-  ngOnDestroy() {
-    if (this.itemsCountSub$) {
-      this.itemsCountSub$.unsubscribe();
-    }
+    this.dialogRef.close();
   }
 }
