@@ -18,32 +18,43 @@ const values: { [name: string]: DocData } = {
   }
 };
 
-const doEverithing = async ({ docPath, fieldName }: DocData, operation: '+' | '-') => {
+const doEverithing = async ({ docPath, fieldName }: DocData, itemType: 'drinks' | 'movies') => {
+  const query = await admin
+    .firestore()
+    .collection('items')
+    .where('type', '==', itemType)
+    .get();
+  const currCount = query.size; // ((await doc.get()).data() as FirebaseFirestore.DocumentData)[fieldName];
+
   const doc = admin.firestore().doc(docPath);
-  const currCount = ((await doc.get()).data() as FirebaseFirestore.DocumentData)[fieldName];
-  if (operation === '+') {
-    await doc.update({ [fieldName]: currCount + 1 });
-  } else if (operation === '-') {
-    await doc.update({ [fieldName]: currCount - 1 });
-  }
+  await doc.update({ [fieldName]: currCount });
 };
 
 export const onCreate = functions.firestore.document('/items/{itemId}').onCreate(async (snap, context) => {
   if (snap.data()) {
     const snapData = snap.data() as FirebaseFirestore.DocumentData;
-    await doEverithing(values[snapData.type], '+');
+    await doEverithing(values[snapData.type], snapData.type);
   }
 });
 
 export const onDelete = functions.firestore.document('/items/{itemId}').onDelete(async (snap, context) => {
-  if (snap.data()) {
-    const snapData = snap.data() as FirebaseFirestore.DocumentData;
-    await doEverithing(values[snapData.type], '-');
+  const snapData = snap.data();
+  if (snapData) {
+    const attachmentUrl = snapData.attachmentUrl;
+    if (attachmentUrl) {
+      const fileName = attachmentUrl
+        .split('?')[0]
+        .split('/')
+        .pop();
+      if (fileName !== undefined) {
+        admin
+          .storage()
+          .bucket('tasks-for-summer.appspot.com')
+          .file(fileName)
+          .delete()
+          .catch((err: any) => console.warn(err));
+      }
+    }
+    await doEverithing(values[snapData.type], snapData.type);
   }
 });
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });

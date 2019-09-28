@@ -50,18 +50,6 @@ export class ItemsService {
 
   removeItem(itemId: string, attachmentRef?: string) {
     const doc = this.itemsCollection.doc(itemId);
-
-    // delete attachment if has one
-    doc.get().subscribe(docSnap => {
-      const attachmentUrl = docSnap.data().attachmentUrl;
-      if (attachmentUrl) {
-        this.storage
-          .ref(docSnap.data().attachmentUrl)
-          .delete()
-          .subscribe();
-      }
-    });
-
     return doc.delete();
   }
 }
