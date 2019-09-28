@@ -3,20 +3,31 @@
     <mat-label>Name</mat-label>
     <input matInput #nameInput cdkFocusInitial placeholder="Name" />
   </mat-form-field>
-  <input type="file" [hidden]="true" accept="image/*" (change)="picIsPicked($event)" #fileInput/>
+  <input type="file" [hidden]="true" accept="image/*" (change)="picIsPicked($event)" #fileInput />
 
   <section class="attachments" *ngIf="hasAttachedPic">
     <span class="attachment-container">
       <img [src]="picUrl" class="pic" *ngIf="isUploaded" />
       <span class="loading-wrapper" *ngIf="!isUploaded">
-        <mat-progress-spinner [diameter]="50" [color]="'primary'" [value]="uploadPercent | async"></mat-progress-spinner>
+        <mat-progress-spinner
+          [diameter]="50"
+          [color]="'primary'"
+          [value]="uploadPercent | async"
+        ></mat-progress-spinner>
       </span>
+      <button mat-icon-button class="clear-btn" (click)="clearPic()">
+        <mat-icon>clear</mat-icon>
+      </button>
     </span>
   </section>
 </div>
 <div mat-dialog-actions>
-  <button mat-button color="accent" class="attach-button" (click)="fileInput.click()">{{ hasAttachedPic ? 'Attach Another Pic' : 'Attach Pic' }}</button>
+  <button mat-button color="accent" class="attach-button" (click)="fileInput.click()">
+    <mat-icon>add_photo_alternate</mat-icon>{{ hasAttachedPic ? 'Attach Another Pic' : 'Attach Pic' }}
+  </button>
   <span class="space-creator"></span>
-  <button [disabled]="!(!hasAttachedPic || isUploaded)" mat-button color="primary" (click)="close(nameInput.value)">OK</button>
+  <button [disabled]="!(!hasAttachedPic || isUploaded)" mat-button color="primary" (click)="close(nameInput.value)">
+    OK
+  </button>
   <button mat-button [mat-dialog-close] color="warn">Cancel</button>
 </div>

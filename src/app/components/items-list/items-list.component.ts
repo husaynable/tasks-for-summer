@@ -1,18 +1,20 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ItemModel } from 'src/app/models/item.model';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { ItemsService } from 'src/app/services/items.service';
 import { Observable } from 'rxjs';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { CreateItemModel } from 'src/app/models/create-item.model';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-items-list',
   templateUrl: './items-list.component.html',
   styleUrls: ['./items-list.component.css']
 })
-export class ItemsListComponent implements OnInit {
+export class ItemsListComponent implements OnInit, OnDestroy {
   items$: Observable<ItemModel[]>;
+  subs = new SubSink();
 
   constructor(
     public dialogRef: MatDialogRef<ItemsListComponent>,
@@ -31,13 +33,9 @@ export class ItemsListComponent implements OnInit {
       width: '400px'
     });
 
-    dialogRef.afterClosed().subscribe((newItem: CreateItemModel) => {
+    this.subs.sink = dialogRef.afterClosed().subscribe((newItem: CreateItemModel) => {
       if (newItem && newItem.name) {
-        if (newItem.picUrl) {
-          this.addItem(newItem.name, newItem.picUrl);
-        } else {
-          this.addItem(newItem.name);
-        }
+        this.addItem(newItem.name, newItem.picUrl);
       }
     });
   }
@@ -60,5 +58,9 @@ export class ItemsListComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }

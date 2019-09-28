@@ -7,7 +7,8 @@
       <div class="list-item-caption-date">{{ item.timestamp | date : 'MMM d' }}</div>
     </span>
     <span class="list-item-actions">
-      <a *ngIf="item.attachmentUrl" [href]="item.attachmentUrl" target="_blank">Show Attachment</a>
+      <button *ngIf="item.attachmentUrl" mat-icon-button (click)="photoLink.click()"><mat-icon>photo</mat-icon></button>
+      <a *ngIf="item.attachmentUrl" [hidden]="true" [href]="item.attachmentUrl" #photoLink target="_blank">Show Attachment</a>
       <button mat-icon-button (click)="deleteItem(item.id)">
         <mat-icon>clear</mat-icon>
       </button>

@@ -4,6 +4,7 @@ import { ItemModel } from '../models/item.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import * as firebase from 'firebase/app';
 export class ItemsService {
   itemsCollection: AngularFirestoreCollection<ItemModel>;
 
-  constructor(private db: AngularFirestore) {
+  constructor(private db: AngularFirestore, private storage: AngularFireStorage) {
     this.itemsCollection = db.collection('items');
   }
 
@@ -47,7 +48,20 @@ export class ItemsService {
     return this.itemsCollection.doc(newItem.id).update(newItem);
   }
 
-  removeItem(itemId: string) {
-    return this.itemsCollection.doc(itemId).delete();
+  removeItem(itemId: string, attachmentRef?: string) {
+    const doc = this.itemsCollection.doc(itemId);
+
+    // delete attachment if has one
+    doc.get().subscribe(docSnap => {
+      const attachmentUrl = docSnap.data().attachmentUrl;
+      if (attachmentUrl) {
+        this.storage
+          .ref(docSnap.data().attachmentUrl)
+          .delete()
+          .subscribe();
+      }
+    });
+
+    return doc.delete();
   }
 }

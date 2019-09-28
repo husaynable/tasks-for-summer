@@ -14,9 +14,16 @@
 
 .attachment-container {
   display: inline-block;
+  position: relative;
   min-width: 80px;
   height: 80px;
   position: relative;
+}
+
+.clear-btn {
+  position: absolute;
+  right: -50%;
+  top: 25%;
 }
 
 .pic {

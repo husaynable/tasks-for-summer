@@ -31,19 +31,12 @@ export class NameGetterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {}
 
-  takePic() {
-    this.modal.open(PictureTakerComponent, {
-      width: '600px'
-    });
-  }
-
   picIsPicked(e: Event) {
     const target = e.target as HTMLInputElement;
     const file = target.files.item(0);
     if (file) {
       if (this.hasAttachedPic && this.picRef) {
-        this.subSink.sink = this.picRef.delete().subscribe();
-        this.isUploaded = false;
+        this.clearPic();
       }
 
       this.hasAttachedPic = true;
@@ -69,7 +62,13 @@ export class NameGetterComponent implements OnInit, OnDestroy {
         )
         .subscribe();
     }
-    console.log(file);
+  }
+
+  clearPic() {
+    this.subSink.sink = this.picRef.delete().subscribe();
+    this.isUploaded = false;
+    this.hasAttachedPic = false;
+    this.picUrl = null;
   }
 
   close(name: string) {
