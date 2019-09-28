@@ -9,23 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
 import { RouterModule } from '@angular/router';
 import { TasksCountComponent } from '../components/tasks-count/tasks-count.component';
-import { PictureTakerComponent } from '../components/picture-taker/picture-taker.component';
 
 @NgModule({
-  declarations: [
-    TasksComponent,
-    TaskItemComponent,
-    TasksListComponent,
-    TaskAdderComponent,
-    TasksCountComponent,
-    PictureTakerComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild([{ path: '', component: TasksComponent }]),
-    MaterialModule
-  ],
-  entryComponents: [PictureTakerComponent]
+  declarations: [TasksComponent, TaskItemComponent, TasksListComponent, TaskAdderComponent, TasksCountComponent],
+  imports: [CommonModule, FormsModule, RouterModule.forChild([{ path: '', component: TasksComponent }]), MaterialModule]
 })
 export class TasksModule {}

@@ -52,6 +52,14 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     this.itemsService.addItem(newItem);
   }
 
+  showPhoto(url: string) {
+    const anchorEl = document.createElement('a');
+    anchorEl.href = url;
+    anchorEl.target = '_blank';
+    document.body.appendChild(anchorEl);
+    anchorEl.click();
+  }
+
   deleteItem(itemId: string) {
     this.itemsService.removeItem(itemId);
   }
