@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{ data.caption }}</h2>
+<h2 mat-dialog-title>{{ captions[this.data.itemsType] }}</h2>
 
 <div mat-dialog-content *ngIf="items$ | async as items; else noItems">
   <div class="list-item" *ngFor="let item of items; let odd = odd" [class.lightgray-back]="odd">

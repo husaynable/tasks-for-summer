@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { CreateItemModel } from 'src/app/models/create-item.model';
 import { SubSink } from 'subsink';
+import { ItemsType } from 'src/app/models/items.type';
 
 @Component({
   selector: 'app-items-list',
@@ -15,11 +16,15 @@ import { SubSink } from 'subsink';
 export class ItemsListComponent implements OnInit, OnDestroy {
   items$: Observable<ItemModel[]>;
   subs = new SubSink();
+  captions = {
+    movies: 'Movies List',
+    drinks: 'Drunk Drinks'
+  };
 
   constructor(
     public dialogRef: MatDialogRef<ItemsListComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { caption: string; itemsType: 'drinks' | 'movies' },
+    public data: { itemsType: ItemsType },
     private itemsService: ItemsService,
     private modal: MatDialog
   ) {}
@@ -58,6 +63,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     anchorEl.target = '_blank';
     document.body.appendChild(anchorEl);
     anchorEl.click();
+    anchorEl.remove();
   }
 
   deleteItem(itemId: string) {

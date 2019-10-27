@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ItemsListComponent } from '../items-list/items-list.component';
 import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-overlay.service';
 import { MatButton } from '@angular/material/button';
+import { ItemsType } from 'src/app/models/items.type';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-task-item',
@@ -23,7 +25,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   holdingProgress = 0;
   progressStop$ = new Subject<void>();
 
-  intervalSub$: Subscription;
+  subs = new SubSink();
 
   constructor(
     private tasksService: TasksService,
@@ -35,7 +37,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   @HostListener('mousedown', ['$event'])
   mouseDownListener() {
     if (!this.task.isFinished) {
-      this.intervalSub$ = interval(1)
+      this.subs.sink = interval(1)
         .pipe(
           filter(v => v > 25),
           takeUntil(this.progressStop$),
@@ -65,35 +67,24 @@ export class TaskItemComponent implements OnInit, OnDestroy {
     this.holdingProgress = this.task.isFinished ? 100 : 0;
   }
 
-  changeMode(mode: boolean) {
-    this.isEditing = mode;
+  changeMode(isEditingMode: boolean) {
+    this.isEditing = isEditingMode;
 
-    if (mode) {
+    if (isEditingMode) {
       setTimeout(() => focusOnInput(this.nameInput.nativeElement), 0);
     }
   }
 
-  openDrinksList() {
-    if (this.task.drunkDrinks + '') {
-      this.dialog.open(ItemsListComponent, {
-        width: '90%',
-        data: { caption: 'Drinks List', itemsType: 'drinks' }
-      });
-    }
-  }
-
-  openMoviesList() {
-    if (this.task.watchedMovies + '') {
-      this.dialog.open(ItemsListComponent, {
-        width: '90%',
-        data: { caption: 'Movies List', itemsType: 'movies' }
-      });
-    }
+  openItemsList(itemsType: ItemsType) {
+    this.dialog.open(ItemsListComponent, {
+      width: '90%',
+      data: { itemsType }
+    });
   }
 
   openFedCatsCounter(matBtn: MatButton) {
     const dialogRef = this.fedCatsCounterService.open(matBtn._elementRef, this.task.countOfFedCats);
-    dialogRef.aftefClosed.subscribe(fedCatsCount => {
+    this.subs.sink = dialogRef.aftefClosed.subscribe(fedCatsCount => {
       if (fedCatsCount !== undefined && this.task.countOfFedCats !== fedCatsCount) {
         const newTask = { ...this.task, countOfFedCats: fedCatsCount } as Task;
         this.tasksService.updateTask(newTask);
@@ -124,8 +115,6 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.intervalSub$) {
-      this.intervalSub$.unsubscribe();
-    }
+    this.subs.unsubscribe();
   }
 }
