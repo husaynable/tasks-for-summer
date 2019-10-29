@@ -1,24 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FedCatsCounterComponent } from './fed-cats-counter.component';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { FedCatsCounterOverlayRef } from 'src/app/services/fed-cats-counter-overlay-ref';
+import { FED_CATS_COUNT } from 'src/app/utils/injection-tokens';
+import { MaterialModule } from 'src/app/material.module';
 
-describe('FedCatsCounterComponent', () => {
-  let component: FedCatsCounterComponent;
-  let fixture: ComponentFixture<FedCatsCounterComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [FedCatsCounterComponent]
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FedCatsCounterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+fdescribe('FedCatsCounterComponent', () => {
+  let spectrator: Spectator<FedCatsCounterComponent>;
+  const createComponent = createComponentFactory({
+    component: FedCatsCounterComponent,
+    detectChanges: false,
+    mocks: [FedCatsCounterOverlayRef],
+    providers: [{ provide: FED_CATS_COUNT, useValue: 3 }],
+    imports: [MaterialModule]
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  beforeEach(() => (spectrator = createComponent()));
+
+  it('should show injected value', () => {
+    spectrator.detectChanges();
+
+    expect(spectrator.query('button').textContent.trim()).toBe('3');
   });
 });

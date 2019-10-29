@@ -1,25 +1,30 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { fakeAsync } from '@angular/core/testing';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 
 import { TasksListComponent } from './tasks-list.component';
+import { TasksService } from 'src/app/services/tasks.service';
+import { of } from 'rxjs';
+import { TaskItemComponent } from '../task-item/task-item.component';
+import { MaterialModule } from 'src/app/material.module';
 
-describe('TasksListComponent', () => {
-  let component: TasksListComponent;
-  let fixture: ComponentFixture<TasksListComponent>;
+fdescribe('TasksListComponent', () => {
+  let spectator: Spectator<TasksListComponent>;
+  const createComponent = createComponentFactory({
+    component: TasksListComponent,
+    detectChanges: false,
+    mocks: [TasksService],
+    imports: [MaterialModule],
+    declarations: [TaskItemComponent]
+  });
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TasksListComponent ]
-    })
-    .compileComponents();
+  beforeEach(() => (spectator = createComponent()));
+
+  it('should create tasks list', fakeAsync(() => {
+    const tasksServie = spectator.get(TasksService);
+    tasksServie.getTasks.and.callFake(() => of([{ id: 1 }, { id: 2 }]));
+
+    spectator.detectChanges();
+
+    expect(spectator.queryAll('app-task-item').length).toBe(2);
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TasksListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });
