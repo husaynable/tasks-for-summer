@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostBinding, ViewChild, ElementRef, HostListe
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
-import { interval, Subject, Subscription } from 'rxjs';
+import { interval, Subject } from 'rxjs';
 import { takeUntil, takeWhile, filter } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemsListComponent } from '../items-list/items-list.component';
@@ -24,6 +24,10 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   isEditing = false;
   holdingProgress = 0;
   progressStop$ = new Subject<void>();
+  holdingAnimFrameID: number;
+  holdingCancelled = false;
+  holdingDelayProgress = 0;
+  holdingTick = 0;
 
   subs = new SubSink();
 
@@ -37,19 +41,8 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   @HostListener('mousedown', ['$event'])
   mouseDownListener() {
     if (!this.task.isFinished) {
-      this.subs.sink = interval(1)
-        .pipe(
-          filter(v => v > 25),
-          takeUntil(this.progressStop$),
-          takeWhile(() => this.holdingProgress <= 99)
-        )
-        .subscribe(() => {
-          this.holdingProgress += 1;
-
-          if (this.holdingProgress === 100) {
-            this.changeTaskStatus();
-          }
-        });
+      this.holdingCancelled = false;
+      this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
     }
   }
 
@@ -58,13 +51,41 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   @HostListener('mouseup')
   mouseUpListener() {
     if (!this.task.isFinished) {
-      this.progressStop$.next();
+      this.holdingCancelled = true;
+      this.holdingDelayProgress = 0;
+      this.holdingTick = 0;
       this.holdingProgress = 0;
+      // this.progressStop$.next();
+      // cancelAnimationFrame(this.holdingAnimFrameID);
+      // setTimeout(() => this.holdingProgress = 0, 50);
+    }
+  }
+
+  updateHoldingProgress() {
+    if (!this.task.isFinished) {
+      if (this.holdingCancelled) {
+        cancelAnimationFrame(this.holdingAnimFrameID);
+      } else if (this.holdingProgress < 1) {
+        if (this.holdingDelayProgress < 25) {
+          this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
+          console.log('eeee delay!', this.holdingDelayProgress);
+          this.holdingDelayProgress++;
+        } else {
+          const t = this.holdingTick / 70;
+          this.holdingProgress = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+          console.log('eeee holding!', this.holdingProgress);
+          this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
+          this.holdingTick++;
+        }
+      } else {
+        this.changeTaskStatus();
+        cancelAnimationFrame(this.holdingAnimFrameID);
+      }
     }
   }
 
   ngOnInit() {
-    this.holdingProgress = this.task.isFinished ? 100 : 0;
+    this.holdingProgress = this.task.isFinished ? 1 : 0;
   }
 
   changeMode(isEditingMode: boolean) {
@@ -106,7 +127,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
     if (!this.task.isFinished) {
       this.holdingProgress = 0;
     } else {
-      this.holdingProgress = 100;
+      this.holdingProgress = 1;
     }
   }
 

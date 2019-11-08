@@ -8,7 +8,7 @@
   <button mat-fab (click)="toggle()" color="warn" class="clear-btn" [@cancelBtnState]="inputState">
     <mat-icon>clear</mat-icon>
   </button>
-  <button mat-fab (click)="addOrToggle()" color="accent" class="add-done-btn">
+  <button mat-fab (click)="addOrToggle()" color="primary" class="add-done-btn">
     <mat-icon *ngIf="inputState === 'hidden'">add</mat-icon>
     <mat-icon *ngIf="inputState === 'visible'">done</mat-icon>
   </button>

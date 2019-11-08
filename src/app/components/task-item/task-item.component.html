@@ -1,7 +1,7 @@
 <!-- <mat-checkbox [checked]="task.isFinished" (change)="changeTaskStatus()">
 </mat-checkbox> -->
 
-<span class="fill-wrapper" [style.right]="100 - holdingProgress + '%'"></span>
+<span class="fill-wrapper" [style.right]="100 - (holdingProgress * 100)  + '%'"></span>
 
 <div class="task-name">
   <span class="task-name-span" *ngIf="!isEditing">{{ task.name }}</span>

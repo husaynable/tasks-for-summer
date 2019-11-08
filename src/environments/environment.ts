@@ -3,15 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  collectionName: 'tasks-test',
+  collectionName: 'tasks',
   production: false,
   firebaseConfig: {
-    apiKey: 'AIzaSyC1yPC5_Q_0iHUlu5O3QCIlY2vD5BktvLM',
-    authDomain: 'tasks-for-summer.firebaseapp.com',
-    databaseURL: 'https://tasks-for-summer.firebaseio.com',
-    projectId: 'tasks-for-summer',
-    storageBucket: 'tasks-for-summer.appspot.com',
-    messagingSenderId: '1039645191162'
+    apiKey: 'AIzaSyBFwMzefMVcYU9xv9FOFpwePePlRxcf2Gk',
+    authDomain: 'tasks-for-summer-dev.firebaseapp.com',
+    databaseURL: 'https://tasks-for-summer-dev.firebaseio.com',
+    projectId: 'tasks-for-summer-dev',
+    storageBucket: 'tasks-for-summer-dev.appspot.com',
+    messagingSenderId: '273164399132',
+    appId: '1:273164399132:web:8e82764f88823c258c25d9',
+    measurementId: 'G-6Q9DEPF1M4'
   }
 };
 
@@ -21,4 +23,4 @@ export const environment = {
  * import the following file, but please comment it out in production mode
  * because it will have performance impact when throw error
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+import 'zone.js/dist/zone-error'; // Included with Angular CLI.
