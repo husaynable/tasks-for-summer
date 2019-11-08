@@ -22,8 +22,8 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   @Input() task: Task;
 
   isEditing = false;
+
   holdingProgress = 0;
-  progressStop$ = new Subject<void>();
   holdingAnimFrameID: number;
   holdingCancelled = false;
   holdingDelayProgress = 0;
@@ -42,6 +42,8 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   mouseDownListener() {
     if (!this.task.isFinished) {
       this.holdingCancelled = false;
+      this.holdingDelayProgress = 0;
+      this.holdingTick = 0;
       this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
     }
   }
@@ -55,9 +57,6 @@ export class TaskItemComponent implements OnInit, OnDestroy {
       this.holdingDelayProgress = 0;
       this.holdingTick = 0;
       this.holdingProgress = 0;
-      // this.progressStop$.next();
-      // cancelAnimationFrame(this.holdingAnimFrameID);
-      // setTimeout(() => this.holdingProgress = 0, 50);
     }
   }
 
@@ -68,12 +67,10 @@ export class TaskItemComponent implements OnInit, OnDestroy {
       } else if (this.holdingProgress < 1) {
         if (this.holdingDelayProgress < 25) {
           this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
-          console.log('eeee delay!', this.holdingDelayProgress);
           this.holdingDelayProgress++;
         } else {
           const t = this.holdingTick / 70;
           this.holdingProgress = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-          console.log('eeee holding!', this.holdingProgress);
           this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
           this.holdingTick++;
         }
