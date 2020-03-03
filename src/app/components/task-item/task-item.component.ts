@@ -2,8 +2,6 @@ import { Component, OnInit, Input, HostBinding, ViewChild, ElementRef, HostListe
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
-import { interval, Subject } from 'rxjs';
-import { takeUntil, takeWhile, filter } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemsListComponent } from '../items-list/items-list.component';
 import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-overlay.service';
@@ -17,7 +15,7 @@ import { SubSink } from 'subsink';
   styleUrls: ['./task-item.component.scss']
 })
 export class TaskItemComponent implements OnInit, OnDestroy {
-  @ViewChild('nameInput', { static: false }) nameInput: ElementRef;
+  @ViewChild('nameInput') nameInput: ElementRef;
   @HostBinding('class') class = 'app-task-item mat-elevation-z1';
   @Input() task: Task;
 

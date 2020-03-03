@@ -34,7 +34,7 @@ import { focusOnInput } from 'src/app/utils/functions';
 export class TaskAdderComponent implements OnInit {
   inputState: 'hidden' | 'visible' = 'hidden';
   newTaskName: string;
-  @ViewChild('taskNameInput', { static: false }) taskNameInput: ElementRef;
+  @ViewChild('taskNameInput') taskNameInput: ElementRef;
 
   constructor(private tasksService: TasksService) {}
 
