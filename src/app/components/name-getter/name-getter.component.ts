@@ -33,7 +33,6 @@ export class NameGetterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.hidePicAttachment = !!this.data.hidePicAttachment;
-    console.log(this.hidePicAttachment);
   }
 
   picIsPicked(e: Event) {

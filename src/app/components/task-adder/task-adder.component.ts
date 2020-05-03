@@ -28,7 +28,7 @@ import { NameGetterComponent } from '../name-getter/name-getter.component';
     ]),
     trigger('cancelBtnState', [
       state('initial, void, hidden', style({ transform: 'translateX(0)', opacity: 0 })),
-      state('visible', style({ transform: 'translateX(-66px) rotate(180deg)' })),
+      state('visible', style({ transform: 'translateX(-66px) rotate(-360deg)' })),
       transition('hidden <=> visible', animate('225ms cubic-bezier(0, 0, 0.2, 1)'))
     ])
   ]

@@ -3,7 +3,9 @@
     <mat-label>New Task</mat-label>
     <input matInput placeholder="Task" [(ngModel)]="newTaskName" #taskNameInput (keyup.enter)="addOrToggle()" autocomplete="false" />
   </mat-form-field>
-  <mat-checkbox [ngModel]="withList" (ngModelChange)="withListToggle($event)">With List</mat-checkbox> {{ listName }}
+  <div class="d-flex-center">
+    <mat-checkbox [ngModel]="withList" (ngModelChange)="withListToggle($event)">With List</mat-checkbox> <span *ngIf="withList"><strong>{{ listName }}</strong></span>
+  </div>
 </div>
 <div class="actions-wrapper">
   <button mat-fab (click)="toggle()" color="warn" class="clear-btn" [@cancelBtnState]="inputState">
