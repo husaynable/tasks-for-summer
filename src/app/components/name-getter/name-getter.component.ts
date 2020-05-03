@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -21,14 +21,20 @@ export class NameGetterComponent implements OnInit, OnDestroy {
   picRef: AngularFireStorageReference;
   picUrl: string;
   subSink = new SubSink();
+  hidePicAttachment = false;
 
   constructor(
     private dialogRef: MatDialogRef<NameGetterComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    private data: { hidePicAttachment: boolean },
     private modal: MatDialog,
     private storage: AngularFireStorage
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.hidePicAttachment = !!this.data.hidePicAttachment;
+    console.log(this.hidePicAttachment);
+  }
 
   picIsPicked(e: Event) {
     const target = e.target as HTMLInputElement;

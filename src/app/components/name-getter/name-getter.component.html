@@ -22,7 +22,7 @@
   </section>
 </div>
 <div mat-dialog-actions>
-  <button mat-button color="accent" class="attach-button" (click)="fileInput.click()">
+  <button mat-button color="accent" class="attach-button" (click)="fileInput.click()" *ngIf="!hidePicAttachment">
     <mat-icon>add_photo_alternate</mat-icon>{{ hasAttachedPic ? 'Attach Another Pic' : 'Attach Pic' }}
   </button>
   <span class="space-creator"></span>

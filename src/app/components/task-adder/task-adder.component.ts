@@ -2,6 +2,8 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger, keyframes } from '@angular/animations';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
+import { MatDialog } from '@angular/material/dialog';
+import { NameGetterComponent } from '../name-getter/name-getter.component';
 
 @Component({
   selector: 'app-task-adder',
@@ -34,13 +36,17 @@ import { focusOnInput } from 'src/app/utils/functions';
 export class TaskAdderComponent implements OnInit {
   inputState: 'hidden' | 'visible' = 'hidden';
   newTaskName: string;
+  withList = false;
+  listName: string;
   @ViewChild('taskNameInput') taskNameInput: ElementRef;
 
-  constructor(private tasksService: TasksService) {}
+  constructor(private tasksService: TasksService, private modal: MatDialog) {}
 
   ngOnInit() {}
 
   toggle() {
+    this.withList = false;
+    this.listName = null;
     this.newTaskName = null;
 
     if (this.inputState === 'hidden') {
@@ -58,6 +64,22 @@ export class TaskAdderComponent implements OnInit {
       await this.tasksService.addTask({ name: this.newTaskName, isFinished: false });
       this.newTaskName = null;
       this.toggle();
+    }
+  }
+
+  withListToggle(checked: boolean) {
+    this.withList = checked;
+    if (checked) {
+      const dialogRef = this.modal.open(NameGetterComponent, { width: '400px', data: { hidePicAttachment: true } });
+      dialogRef.afterClosed().subscribe(nameModel => {
+        if (nameModel && nameModel.name) {
+          this.listName = nameModel.name;
+        } else {
+          this.withList = false;
+        }
+      });
+    } else {
+      this.listName = undefined;
     }
   }
 }
