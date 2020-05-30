@@ -1,4 +1,4 @@
-import { ItemModel } from './item.model';
+import { ListModel } from './list.model';
 
 export interface Task {
   id?: string;
@@ -7,4 +7,5 @@ export interface Task {
   drunkDrinks?: number;
   watchedMovies?: number;
   countOfFedCats?: number;
+  list?: ListModel;
 }

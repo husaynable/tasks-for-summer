@@ -4,6 +4,7 @@ import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
 import { MatDialog } from '@angular/material/dialog';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-task-adder',
@@ -61,7 +62,21 @@ export class TaskAdderComponent implements OnInit {
     if (!this.newTaskName) {
       this.toggle();
     } else {
-      await this.tasksService.addTask({ name: this.newTaskName, isFinished: false });
+      const task: Task = {
+        name: this.newTaskName,
+        isFinished: false
+      };
+      if (this.withList) {
+        task.list = {
+          displayText: this.listName,
+          name: this.listName
+            .trim()
+            .replace(' ', '_')
+            .toLowerCase(),
+          showCount: false
+        };
+      }
+      await this.tasksService.addTask(task);
       this.newTaskName = null;
       this.toggle();
     }

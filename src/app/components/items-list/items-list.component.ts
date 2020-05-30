@@ -35,7 +35,8 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
   openNameGetter() {
     const dialogRef = this.modal.open(NameGetterComponent, {
-      width: '400px'
+      width: '400px',
+      data: { hidePicAttachment: false }
     });
 
     this.subs.sink = dialogRef.afterClosed().subscribe((newItem: CreateItemModel) => {

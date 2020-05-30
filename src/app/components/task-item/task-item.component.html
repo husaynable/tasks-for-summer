@@ -33,6 +33,12 @@
       Fed {{ task.countOfFedCats }} cats
     </button>
   </span>
+
+  <span *ngIf="task.list && !isEditing" class="items-button">
+    <button mat-raised-button color="primary" (click)="openItemsList(task.list.name)">
+      {{ task.list.displayText }}
+    </button>
+  </span>
 </div>
 
 <!-- <div>{{ holdingProgress }}</div> -->

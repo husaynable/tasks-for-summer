@@ -16,7 +16,7 @@ export class ItemsService {
     this.itemsCollection = db.collection('items');
   }
 
-  getItems(itemsType: 'drinks' | 'movies'): Observable<ItemModel[]> {
+  getItems(itemsType: string): Observable<ItemModel[]> {
     return this.db
       .collection('items', ref => ref.where('type', '==', itemsType).orderBy('timestamp'))
       .snapshotChanges()

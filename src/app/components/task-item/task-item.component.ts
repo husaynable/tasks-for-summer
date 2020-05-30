@@ -91,10 +91,10 @@ export class TaskItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  openItemsList(itemsType: ItemsType) {
+  openItemsList(itemsName: string) {
     this.dialog.open(ItemsListComponent, {
       width: '90%',
-      data: { itemsType }
+      data: { itemsType: itemsName }
     });
   }
 
