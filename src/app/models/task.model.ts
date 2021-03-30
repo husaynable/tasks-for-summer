@@ -1,3 +1,4 @@
+import { firestore } from 'firebase';
 import { ListModel } from './list.model';
 
 export interface Task {
@@ -8,4 +9,5 @@ export interface Task {
   watchedMovies?: number;
   countOfFedCats?: number;
   list?: ListModel;
+  timestamp: firestore.Timestamp;
 }
