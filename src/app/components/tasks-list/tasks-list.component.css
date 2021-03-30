@@ -4,6 +4,11 @@
   margin-top: 10vh;
 }
 
-.app-task-item+.app-task-item {
+.app-task-item + .app-task-item {
   margin-top: 15px;
+}
+
+.tasks-container {
+  padding-bottom: 8em;
+  padding-top: 4em;
 }
