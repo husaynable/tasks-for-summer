@@ -3,10 +3,10 @@
     "default": "tasks-for-summer"
   },
   "targets": {
-    "tasks-for-summer-dev": {
+    "tasks-for-summer": {
       "hosting": {
         "tasks-for-summer": [
-          "tasks-for-summer-dev"
+          "tasks-for-summer"
         ]
       }
     }
