@@ -3,30 +3,25 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { NotifierService } from 'angular-notifier';
 import { Router } from '@angular/router';
+import firebase from 'firebase/app';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  constructor(
-    private afAuth: AngularFireAuth,
-    private notifier: NotifierService,
-    private router: Router
-  ) {}
+  constructor(private afAuth: AngularFireAuth, private notifier: NotifierService, private router: Router) {}
 
-  get isAuth(): boolean {
-    return this.afAuth.auth.currentUser !== null;
+  get isAuth(): Observable<boolean> {
+    return this.afAuth.user.pipe(map(u => !!u));
   }
 
   get authState(): Observable<firebase.User> {
     return this.afAuth.authState;
   }
 
-  login(
-    login: string,
-    password: string
-  ): Promise<firebase.auth.UserCredential | null> {
-    return this.afAuth.auth
+  login(login: string, password: string): Promise<firebase.auth.UserCredential | null> {
+    return this.afAuth
       .signInWithEmailAndPassword(login, password)
       .catch(authError => {
         this.notifier.show({ type: 'error', message: authError.message });
@@ -44,7 +39,7 @@ export class LoginService {
   }
 
   logOut(): Promise<void> {
-    return this.afAuth.auth.signOut().then(() => {
+    return this.afAuth.signOut().then(() => {
       this.router.navigate(['login']);
     });
   }

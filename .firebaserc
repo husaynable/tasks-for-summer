@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "tasks-for-summer"
+  },
+  "targets": {
+    "tasks-for-summer-dev": {
+      "hosting": {
+        "tasks-for-summer": [
+          "tasks-for-summer-dev"
+        ]
+      }
+    }
   }
 }

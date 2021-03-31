@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { ItemModel } from '../models/item.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({
@@ -18,18 +18,8 @@ export class ItemsService {
 
   getItems(itemsType: string): Observable<ItemModel[]> {
     return this.db
-      .collection('items', ref => ref.where('type', '==', itemsType).orderBy('timestamp'))
-      .snapshotChanges()
-      .pipe(
-        map(actions =>
-          actions.map(a => {
-            let data = a.payload.doc.data() as ItemModel;
-            data = { ...data, timestamp: data.timestamp.toDate() };
-            const id = a.payload.doc.id;
-            return { id, ...data };
-          })
-        )
-      );
+      .collection<ItemModel>('items', ref => ref.where('type', '==', itemsType).orderBy('timestamp'))
+      .valueChanges({ idField: 'id' });
   }
 
   addItem(item: ItemModel) {

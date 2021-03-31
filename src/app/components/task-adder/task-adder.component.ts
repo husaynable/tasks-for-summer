@@ -5,7 +5,7 @@ import { focusOnInput } from 'src/app/utils/functions';
 import { MatDialog } from '@angular/material/dialog';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { Task } from '../../models/task.model';
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-task-adder',
@@ -66,7 +66,7 @@ export class TaskAdderComponent implements OnInit {
       const task: Task = {
         name: this.newTaskName,
         isFinished: false,
-        timestamp: firestore.Timestamp.now()
+        timestamp: firebase.firestore.Timestamp.now()
       };
       if (this.withList) {
         task.list = {
