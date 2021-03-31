@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["firebase"],
             "aot": true,
             "outputPath": "dist/tasks-for-summer",
             "index": "src/index.html",
