@@ -19,7 +19,7 @@ export class TasksService {
   tasksCollection: AngularFirestoreCollection<Task>;
 
   constructor(private db: AngularFirestore, private notifier: NotifierService) {
-    this.tasksCollection = db.collection<Task>(environment.collectionName, ref => ref.orderBy('name'));
+    this.tasksCollection = db.collection<Task>(environment.collectionName, ref => ref.orderBy('timestamp', 'desc'));
   }
 
   getTasks(): Observable<Task[]> {

@@ -9,8 +9,8 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
 export class OrderByComponent implements OnInit {
   @Output() changed = new EventEmitter<SortModel>();
 
-  currentValue: 'timestamp' | 'name' = 'name';
-  currentDirection: 'asc' | 'desc' = 'asc';
+  currentValue: 'timestamp' | 'name' = 'timestamp';
+  currentDirection: 'asc' | 'desc' = 'desc';
 
   constructor() {}
 
