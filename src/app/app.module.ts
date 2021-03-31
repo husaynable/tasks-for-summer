@@ -40,13 +40,13 @@ const notifierConfig: NotifierOptions = {
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      {
+    {
         path: '',
         loadChildren: () => import('./modules/tasks.module').then(m => m.TasksModule),
         canActivate: [LoginGuard]
-      },
-      { path: 'login', component: LoginComponent }
-    ]),
+    },
+    { path: 'login', component: LoginComponent }
+], { relativeLinkResolution: 'legacy' }),
     FormsModule,
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
