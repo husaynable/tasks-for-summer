@@ -1,0 +1,10 @@
+Order by:
+<mat-button-toggle-group [(value)]="currentValue" (change)="onValChanged($event)">
+  <mat-button-toggle value="timestamp">time</mat-button-toggle>
+  <mat-button-toggle value="name">caption</mat-button-toggle>
+</mat-button-toggle-group>
+Direction:
+<mat-button-toggle-group [(value)]="currentDirection" (change)="onDirChanged($event)">
+  <mat-button-toggle value="asc">asc</mat-button-toggle>
+  <mat-button-toggle value="desc">desc</mat-button-toggle>
+</mat-button-toggle-group>

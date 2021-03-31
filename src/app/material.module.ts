@@ -10,6 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 const modules = [
   MatCheckboxModule,
   MatButtonModule,
@@ -21,7 +22,8 @@ const modules = [
   MatDialogModule,
   MatListModule,
   OverlayModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatButtonToggleModule
 ];
 
 @NgModule({

@@ -1,4 +1,5 @@
 <div [@listAnimation]="tasksLength" class="tasks-container">
-  <app-task-item *ngFor="let task of tasks | async; trackBy: trackTask" [task]="task">
+  <app-order-by (changed)="onSortChanged($event)"></app-order-by>
+  <app-task-item *ngFor="let task of tasks; trackBy: trackTask" [task]="task">
   </app-task-item>
 </div>

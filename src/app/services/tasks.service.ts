@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { Task } from '../models/task.model';
 import { NotifierService } from 'angular-notifier';
 import { environment } from '../../environments/environment';
+import { SortModel } from '../components/order-by/order-by.component';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ import { environment } from '../../environments/environment';
 export class TasksService {
   tasksCollection: AngularFirestoreCollection<Task>;
 
-  constructor(db: AngularFirestore, private notifier: NotifierService) {
+  constructor(private db: AngularFirestore, private notifier: NotifierService) {
     this.tasksCollection = db.collection<Task>(environment.collectionName, ref => ref.orderBy('name'));
   }
 
@@ -40,6 +41,12 @@ export class TasksService {
     this.notifier.notify('success', 'Task for Summer is deleted!');
     const taskDoc = this.getDoc(taskId);
     return taskDoc.delete();
+  }
+
+  applySort(sort: SortModel) {
+    this.tasksCollection = this.db.collection<Task>(environment.collectionName, ref =>
+      ref.orderBy(sort.value, sort.direction)
+    );
   }
 
   private getDoc(taskId: string): AngularFirestoreDocument<Task> {

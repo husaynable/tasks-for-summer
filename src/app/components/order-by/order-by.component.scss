@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+
+  .mat-button-toggle-group:first-child {
+    margin-right: 20px;
+  }
+
+  ::ng-deep {
+    .mat-button-toggle-label-content {
+      line-height: 32px !important;
+    }
+
+    .mat-button-toggle {
+      background-color: #f59f40 !important;
+    }
+
+    .mat-button-toggle-checked {
+      background-color: #f36b37 !important;
+    }
+  }
+}
