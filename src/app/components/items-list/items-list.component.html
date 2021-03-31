@@ -5,7 +5,7 @@
     <div class="list-item" *ngFor="let item of items; let odd = odd" [class.lightgray-back]="odd">
       <span class="list-item-caption">
         <div class="list-item-caption-header">{{ item.name }}</div>
-        <div class="list-item-caption-date">{{ item.timestamp | date: 'MMM d' }}</div>
+        <div class="list-item-caption-date">{{ item.timestamp | date: 'MMM d, yyyy' }}</div>
       </span>
       <span class="list-item-actions">
         <button *ngIf="item.attachmentUrl" mat-icon-button (click)="showPhoto(item.attachmentUrl)">
