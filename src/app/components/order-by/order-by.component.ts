@@ -8,9 +8,11 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
 })
 export class OrderByComponent implements OnInit {
   @Output() changed = new EventEmitter<SortModel>();
+  @Output() filterChanged = new EventEmitter<FilterType>();
 
   currentValue: 'timestamp' | 'name' = 'timestamp';
   currentDirection: 'asc' | 'desc' = 'desc';
+  filter: FilterType = 'all';
 
   constructor() {}
 
@@ -23,9 +25,15 @@ export class OrderByComponent implements OnInit {
   onDirChanged(e: MatButtonToggleChange) {
     this.changed.emit({ value: this.currentValue, direction: e.value });
   }
+
+  onFilterChanged(e: MatButtonToggleChange) {
+    this.filterChanged.emit(e.value);
+  }
 }
 
 export interface SortModel {
   value: 'timestamp' | 'name';
   direction: 'asc' | 'desc';
 }
+
+export type FilterType = 'all' | 'finished' | 'notFinished';

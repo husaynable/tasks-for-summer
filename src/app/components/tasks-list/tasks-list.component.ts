@@ -3,7 +3,7 @@ import { TasksService } from 'src/app/services/tasks.service';
 import { Observable, Subscription } from 'rxjs';
 import { Task } from 'src/app/models/task.model';
 import { trigger, transition, query, stagger, animate, style } from '@angular/animations';
-import { SortModel } from '../order-by/order-by.component';
+import { FilterType, SortModel } from '../order-by/order-by.component';
 
 @Component({
   selector: 'app-tasks-list',
@@ -14,14 +14,14 @@ import { SortModel } from '../order-by/order-by.component';
         // each time the binding value changes
         query(
           ':leave',
-          [stagger(100, [animate('0.3s ease-out', style({ opacity: 0, transform: 'translateX(50%)' }))])],
+          [stagger(30, [animate('0.2s ease-out', style({ opacity: 0, transform: 'translateX(50%)' }))])],
           { optional: true }
         ),
         query(
           ':enter',
           [
             style({ opacity: 0, transform: 'translateX(-50%)' }),
-            stagger(100, [animate('0.3s ease-in', style({ opacity: 1, transform: 'translateX(0)' }))])
+            stagger(30, [animate('0.2s ease-in', style({ opacity: 1, transform: 'translateX(0)' }))])
           ],
           { optional: true }
         )
@@ -51,6 +51,12 @@ export class TasksListComponent implements OnInit {
 
   onSortChanged(sort: SortModel) {
     this.tasksService.applySort(sort);
+    this.tasksSub.unsubscribe();
+    this.ngOnInit();
+  }
+
+  onFilterChanged(filter: FilterType) {
+    this.tasksService.applyFilter(filter);
     this.tasksSub.unsubscribe();
     this.ngOnInit();
   }

@@ -3,23 +3,32 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
   DocumentReference,
-  AngularFirestoreDocument
+  AngularFirestoreDocument,
+  CollectionReference
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Task } from '../models/task.model';
 import { NotifierService } from 'angular-notifier';
 import { environment } from '../../environments/environment';
-import { SortModel } from '../components/order-by/order-by.component';
+import { FilterType, SortModel } from '../components/order-by/order-by.component';
+import firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TasksService {
   tasksCollection: AngularFirestoreCollection<Task>;
+  currentSort: SortModel = {
+    value: 'timestamp',
+    direction: 'desc'
+  };
+  currentFilter: FilterType = 'all';
+  initRef: CollectionReference<firebase.firestore.DocumentData>;
 
   constructor(private db: AngularFirestore, private notifier: NotifierService) {
     this.tasksCollection = db.collection<Task>(environment.collectionName, ref => ref.orderBy('timestamp', 'desc'));
+    this.initRef = this.tasksCollection.ref;
   }
 
   getTasks(): Observable<Task[]> {
@@ -44,9 +53,24 @@ export class TasksService {
   }
 
   applySort(sort: SortModel) {
-    this.tasksCollection = this.db.collection<Task>(environment.collectionName, ref =>
-      ref.orderBy(sort.value, sort.direction)
-    );
+    this.currentSort = sort;
+    this.tasksCollection = this.db.collection<Task>(environment.collectionName, this.getUpdatedRef.bind(this));
+  }
+
+  applyFilter(filter: FilterType) {
+    this.currentFilter = filter;
+    this.tasksCollection = this.db.collection<Task>(environment.collectionName, this.getUpdatedRef.bind(this));
+  }
+
+  private getUpdatedRef() {
+    let ref = this.initRef.orderBy(this.currentSort.value, this.currentSort.direction);
+    if (this.currentFilter === 'finished') {
+      ref = ref.where('isFinished', '==', true);
+    } else if (this.currentFilter === 'notFinished') {
+      ref = ref.where('isFinished', '==', false);
+    }
+
+    return ref;
   }
 
   private getDoc(taskId: string): AngularFirestoreDocument<Task> {
