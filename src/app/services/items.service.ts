@@ -23,19 +23,11 @@ export class ItemsService {
   }
 
   addItem(item: ItemModel) {
-    const itemToAdd = {
-      ...item,
-      timestamp: firebase.firestore.Timestamp.fromDate(item.timestamp)
-    };
-    return this.itemsCollection.add(itemToAdd);
+    return this.itemsCollection.add(item);
   }
 
   updateItem(item: ItemModel) {
-    const newItem = {
-      ...item,
-      timestamp: firebase.firestore.Timestamp.fromDate(item.timestamp)
-    };
-    return this.itemsCollection.doc(newItem.id).update(newItem);
+    return this.itemsCollection.doc(item.id).update(item);
   }
 
   removeItem(itemId: string, attachmentRef?: string) {

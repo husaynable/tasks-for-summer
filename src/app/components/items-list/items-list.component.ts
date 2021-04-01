@@ -7,6 +7,7 @@ import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { CreateItemModel } from 'src/app/models/create-item.model';
 import { SubSink } from 'subsink';
 import { ItemsType } from 'src/app/models/items.type';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-items-list',
@@ -49,7 +50,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   addItem(name: string, attachUrl?: string) {
     const newItem: ItemModel = {
       name,
-      timestamp: new Date(),
+      timestamp: firebase.firestore.Timestamp.now(),
       type: this.data.itemsType
     };
     if (attachUrl) {
