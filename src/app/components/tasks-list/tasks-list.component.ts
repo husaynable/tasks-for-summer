@@ -51,13 +51,9 @@ export class TasksListComponent implements OnInit {
 
   onSortChanged(sort: SortModel) {
     this.tasksService.applySort(sort);
-    this.tasksSub.unsubscribe();
-    this.ngOnInit();
   }
 
   onFilterChanged(filter: FilterType) {
     this.tasksService.applyFilter(filter);
-    this.tasksSub.unsubscribe();
-    this.ngOnInit();
   }
 }

@@ -1,9 +1,20 @@
-
 <div class="filter-section">
   <mat-button-toggle-group [(value)]="filter" (change)="onFilterChanged($event)">
-    <mat-button-toggle value="all">all</mat-button-toggle>
-    <mat-button-toggle value="finished">finished</mat-button-toggle>
-    <mat-button-toggle value="notFinished">not fin.</mat-button-toggle>
+    <mat-button-toggle value="all"
+      ><div class="btn-text">
+        all <strong>{{ (counts$ | async)?.all }}</strong>
+      </div></mat-button-toggle
+    >
+    <mat-button-toggle value="finished"
+      ><div class="btn-text">
+        finished <strong>{{ (counts$ | async)?.finished }}</strong>
+      </div></mat-button-toggle
+    >
+    <mat-button-toggle value="notFinished"
+      ><div class="btn-text">
+        not fin. <strong>{{ (counts$ | async)?.notFinished }}</strong>
+      </div></mat-button-toggle
+    >
   </mat-button-toggle-group>
 </div>
 

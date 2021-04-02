@@ -1,5 +1,8 @@
 import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { TasksService } from 'src/app/services/tasks.service';
+import { Observable } from 'rxjs';
+import { Counts } from '../../models/counts.model';
 
 @Component({
   selector: 'app-order-by',
@@ -13,10 +16,13 @@ export class OrderByComponent implements OnInit {
   currentValue: 'timestamp' | 'name' = 'timestamp';
   currentDirection: 'asc' | 'desc' = 'desc';
   filter: FilterType = 'all';
+  counts$: Observable<Counts>;
 
-  constructor() {}
+  constructor(private tasksService: TasksService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.counts$ = this.tasksService.getCounts();
+  }
 
   onValChanged(e: MatButtonToggleChange) {
     this.changed.emit({ value: e.value, direction: this.currentDirection });

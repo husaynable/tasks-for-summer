@@ -1,7 +1,7 @@
 :host {
   display: block;
   margin-bottom: 20vh;
-  margin-top: 10vh;
+  /* margin-top: 10vh; */
 }
 
 .app-task-item + .app-task-item {
