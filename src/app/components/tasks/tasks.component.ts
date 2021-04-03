@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-tasks',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
+  constructor(private loginService: LoginService) {}
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  logout() {
+    this.loginService.logOut();
   }
-
 }

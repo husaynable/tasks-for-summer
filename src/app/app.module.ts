@@ -19,6 +19,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { ItemsListComponent } from './components/items-list/items-list.component';
 import { NameGetterComponent } from './components/name-getter/name-getter.component';
 import { FedCatsCounterComponent } from './components/fed-cats-counter/fed-cats-counter.component';
+import { EqualDirective } from './directives/validate-equal.directive';
 
 const notifierConfig: NotifierOptions = {
   position: {
@@ -35,18 +36,28 @@ const notifierConfig: NotifierOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, ItemsListComponent, NameGetterComponent, FedCatsCounterComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    ItemsListComponent,
+    NameGetterComponent,
+    FedCatsCounterComponent,
+    EqualDirective
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot([
-    {
-        path: '',
-        loadChildren: () => import('./modules/tasks.module').then(m => m.TasksModule),
-        canActivate: [LoginGuard]
-    },
-    { path: 'login', component: LoginComponent }
-], { relativeLinkResolution: 'legacy' }),
+    RouterModule.forRoot(
+      [
+        {
+          path: '',
+          loadChildren: () => import('./modules/tasks.module').then(m => m.TasksModule),
+          canActivate: [LoginGuard]
+        },
+        { path: 'login', component: LoginComponent }
+      ],
+      { relativeLinkResolution: 'legacy' }
+    ),
     FormsModule,
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
