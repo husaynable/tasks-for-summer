@@ -10,6 +10,8 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class LoginService {
+  userId: string;
+
   constructor(private afAuth: AngularFireAuth, private notifier: NotifierService, private router: Router) {}
 
   get isAuth(): Observable<boolean> {
@@ -23,18 +25,19 @@ export class LoginService {
   login(login: string, password: string): Promise<firebase.auth.UserCredential | null> {
     return this.afAuth
       .signInWithEmailAndPassword(login, password)
-      .catch(authError => {
-        this.notifier.show({ type: 'error', message: authError.message });
-        return null;
-      })
       .then(creds => {
         if (creds) {
           this.notifier.show({
             type: 'success',
-            message: 'Welcome to the List of Tasks for Summer, HusAlina!'
+            message: `Welcome to the List of Tasks for Summer, ${creds.user.displayName}!`
           });
+          this.userId = creds.user.uid;
         }
         return creds;
+      })
+      .catch(authError => {
+        this.notifier.show({ type: 'error', message: authError.message });
+        return null;
       });
   }
 
@@ -46,5 +49,17 @@ export class LoginService {
 
   createUser(email: string, password: string) {
     return this.afAuth.createUserWithEmailAndPassword(email, password);
+  }
+
+  getUserId() {
+    if (this.userId) {
+      return this.userId;
+    } else {
+      throw new Error('user is not logged in');
+    }
+  }
+
+  setUserId(userId: string) {
+    this.userId = userId;
   }
 }

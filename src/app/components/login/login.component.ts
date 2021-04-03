@@ -11,21 +11,18 @@ import { NotifierService } from 'angular-notifier';
 export class LoginComponent implements OnInit {
   login: string;
   password: string;
-  repeatPassword: string;
-  isCreatingUser = false;
 
-  constructor(private loginService: LoginService, private router: Router, private notify: NotifierService) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   ngOnInit() {}
 
   logIn() {
-    if (!this.isCreatingUser) {
-      this.loginService.login(this.login, this.password).then(creds => {
-        if (creds) {
-          this.router.navigate(['']);
-        }
-      });
-    }
+    this.loginService.login(this.login, this.password).then(creds => {
+      if (creds) {
+        this.loginService.setUserId(creds.user.uid);
+        this.router.navigate(['']);
+      }
+    });
   }
 
   logOut() {
@@ -33,23 +30,6 @@ export class LoginComponent implements OnInit {
   }
 
   createNew() {
-    if (!this.isCreatingUser) {
-      this.isCreatingUser = true;
-      this.login = '';
-      this.password = '';
-      this.repeatPassword = '';
-      return;
-    }
-
-    this.loginService
-      .createUser(this.login, this.password)
-      .then(res => {
-        this.notify.notify('success', `User "${this.login}" is created successfully!`);
-        this.isCreatingUser = false;
-      })
-      .catch(err => {
-        console.error(err);
-        this.notify.notify('error', err && err.message ? err.message : 'Error while creating user. Please try again');
-      });
+    this.router.navigateByUrl('/create-user');
   }
 }

@@ -10,4 +10,5 @@ export interface Task {
   countOfFedCats?: number;
   list?: ListModel;
   timestamp: firebase.firestore.Timestamp;
+  userId?: string;
 }

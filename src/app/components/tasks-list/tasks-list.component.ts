@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
 import { TasksService } from 'src/app/services/tasks.service';
 import { Observable, Subscription } from 'rxjs';
 import { Task } from 'src/app/models/task.model';
@@ -28,9 +28,10 @@ import { FilterType, SortModel } from '../order-by/order-by.component';
       ])
     ])
   ],
-  styleUrls: ['./tasks-list.component.css']
+  styleUrls: ['./tasks-list.component.css'],
+  providers: [TasksService]
 })
-export class TasksListComponent implements OnInit {
+export class TasksListComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'app-tasks-list container';
   tasks: Task[] = [];
   tasksSub: Subscription;
@@ -55,5 +56,9 @@ export class TasksListComponent implements OnInit {
 
   onFilterChanged(filter: FilterType) {
     this.tasksService.applyFilter(filter);
+  }
+
+  ngOnDestroy() {
+    this.tasksSub.unsubscribe();
   }
 }

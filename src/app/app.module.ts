@@ -20,6 +20,7 @@ import { ItemsListComponent } from './components/items-list/items-list.component
 import { NameGetterComponent } from './components/name-getter/name-getter.component';
 import { FedCatsCounterComponent } from './components/fed-cats-counter/fed-cats-counter.component';
 import { EqualDirective } from './directives/validate-equal.directive';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 const notifierConfig: NotifierOptions = {
   position: {
@@ -42,7 +43,8 @@ const notifierConfig: NotifierOptions = {
     ItemsListComponent,
     NameGetterComponent,
     FedCatsCounterComponent,
-    EqualDirective
+    EqualDirective,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +56,8 @@ const notifierConfig: NotifierOptions = {
           loadChildren: () => import('./modules/tasks.module').then(m => m.TasksModule),
           canActivate: [LoginGuard]
         },
-        { path: 'login', component: LoginComponent }
+        { path: 'login', component: LoginComponent },
+        { path: 'create-user', component: CreateUserComponent }
       ],
       { relativeLinkResolution: 'legacy' }
     ),
