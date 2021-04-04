@@ -1,5 +1,5 @@
 <div class="filter-section">
-  <mat-button-toggle-group [(value)]="filter" (change)="onFilterChanged($event)">
+  <mat-button-toggle-group [(value)]="filter" (change)="onFilterChanged($event)" class="filter-group">
     <mat-button-toggle value="all"
       ><div class="btn-text">
         all <strong>{{ (counts$ | async)?.all }}</strong>
@@ -19,14 +19,19 @@
 </div>
 
 <div class="sort-section">
-  Order by:
-  <mat-button-toggle-group [(value)]="currentValue" (change)="onValChanged($event)">
-    <mat-button-toggle value="timestamp">time</mat-button-toggle>
-    <mat-button-toggle value="name">caption</mat-button-toggle>
-  </mat-button-toggle-group>
-  Direction:
-  <mat-button-toggle-group [(value)]="currentDirection" (change)="onDirChanged($event)">
-    <mat-button-toggle value="asc">asc</mat-button-toggle>
-    <mat-button-toggle value="desc">desc</mat-button-toggle>
-  </mat-button-toggle-group>
+  <span class="value-section">
+    Order by:
+    <mat-button-toggle-group [(value)]="currentValue" (change)="onValChanged($event)">
+      <mat-button-toggle value="timestamp">time</mat-button-toggle>
+      <mat-button-toggle value="name">caption</mat-button-toggle>
+    </mat-button-toggle-group>
+  </span>
+
+  <span class="dir-section">
+    Direction:
+    <mat-button-toggle-group [(value)]="currentDirection" (change)="onDirChanged($event)">
+      <mat-button-toggle value="asc">asc</mat-button-toggle>
+      <mat-button-toggle value="desc">desc</mat-button-toggle>
+    </mat-button-toggle-group>
+  </span>
 </div>

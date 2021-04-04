@@ -9,7 +9,7 @@
   <mat-form-field *ngIf="isEditing">
     <input
       #nameInput
-      placeholder="Введите задачу"
+      placeholder="Task"
       matInput
       [value]="task.name"
       (keyup.enter)="changeTaskName(nameInput.value)"
