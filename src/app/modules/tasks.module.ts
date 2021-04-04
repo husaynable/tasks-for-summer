@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { TasksCountComponent } from '../components/tasks-count/tasks-count.component';
 import { OrderByComponent } from '../components/order-by/order-by.component';
 import { EqualDirective } from '../directives/validate-equal.directive';
+import { SettingsComponent } from '../components/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { EqualDirective } from '../directives/validate-equal.directive';
     TasksListComponent,
     TaskAdderComponent,
     TasksCountComponent,
-    OrderByComponent
+    OrderByComponent,
+    SettingsComponent
   ],
   imports: [CommonModule, FormsModule, RouterModule.forChild([{ path: '', component: TasksComponent }]), MaterialModule]
 })

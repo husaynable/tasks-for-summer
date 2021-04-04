@@ -1,0 +1,13 @@
+<div class="settings-gear" matRipple (click)="toggle()">
+  <mat-icon>settings</mat-icon>
+</div>
+<mat-selection-list [multiple]="false">
+  <mat-list-option>
+    <mat-icon mat-list-icon>manage_accounts</mat-icon>
+    <div>Edit profile</div>
+  </mat-list-option>
+  <mat-list-option (click)="logout()">
+    <mat-icon mat-list-icon>logout</mat-icon>
+    <div>Logout</div>
+  </mat-list-option>
+</mat-selection-list>
