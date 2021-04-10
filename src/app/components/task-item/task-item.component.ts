@@ -8,6 +8,7 @@ import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-
 import { MatButton } from '@angular/material/button';
 import { ItemsType } from 'src/app/models/items.type';
 import { SubSink } from 'subsink';
+import { CounterOverlayService } from './../../services/counter-overlay.service';
 
 @Component({
   selector: 'app-task-item',
@@ -32,7 +33,8 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   constructor(
     private tasksService: TasksService,
     private dialog: MatDialog,
-    private fedCatsCounterService: FedCatsCounterOverlayService
+    private fedCatsCounterService: FedCatsCounterOverlayService,
+    private counterCountService: CounterOverlayService
   ) {}
 
   @HostListener('touchstart', ['$event'])
@@ -104,6 +106,16 @@ export class TaskItemComponent implements OnInit, OnDestroy {
       if (fedCatsCount !== undefined && this.task.countOfFedCats !== fedCatsCount) {
         const newTask = { ...this.task, countOfFedCats: fedCatsCount } as Task;
         this.tasksService.updateTask(newTask);
+      }
+    });
+  }
+
+  openCounter(matButton: MatButton) {
+    const dialogRef = this.counterCountService.open(matButton._elementRef, this.task.counterCount);
+    this.subs.sink = dialogRef.aftefClosed.subscribe(counterCount => {
+      if ((!!counterCount || counterCount === 0) && this.task.counterCount !== counterCount) {
+        const updatedTask = { ...this.task, counterCount };
+        this.tasksService.updateTask(updatedTask);
       }
     });
   }

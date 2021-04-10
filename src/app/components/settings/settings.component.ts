@@ -1,5 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EditUserComponent } from '../edit-user/edit-user.component';
 
 @Component({
   selector: 'app-settings',
@@ -9,7 +11,7 @@ import { LoginService } from 'src/app/services/login.service';
 export class SettingsComponent implements OnInit {
   @HostBinding('class') classes = '';
 
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService, private dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
@@ -19,6 +21,10 @@ export class SettingsComponent implements OnInit {
     } else {
       this.classes = 'opened';
     }
+  }
+
+  editProfile() {
+    this.dialog.open(EditUserComponent);
   }
 
   logout() {

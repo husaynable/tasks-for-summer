@@ -34,6 +34,12 @@
     </button>
   </span>
 
+  <span *ngIf="task.counterCount !== undefined && !isEditing" class="items-button">
+    <button mat-fab color="primary" class="mat-elevation-z1" #counterButton (click)="openCounter(counterButton)">
+      {{ task.counterCount }}
+    </button>
+  </span>
+
   <span *ngIf="task.list && !isEditing" class="items-button">
     <button mat-raised-button color="primary" (click)="openItemsList(task.list.name)">
       {{ task.list.displayText }}

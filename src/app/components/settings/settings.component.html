@@ -2,7 +2,7 @@
   <mat-icon>settings</mat-icon>
 </div>
 <mat-selection-list [multiple]="false">
-  <mat-list-option>
+  <mat-list-option (click)="editProfile()">
     <mat-icon mat-list-icon>manage_accounts</mat-icon>
     <div>Edit profile</div>
   </mat-list-option>

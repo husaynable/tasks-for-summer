@@ -39,6 +39,7 @@ export class TaskAdderComponent implements OnInit {
   inputState: 'hidden' | 'visible' = 'hidden';
   newTaskName: string;
   withList = false;
+  withCounter = false;
   listName: string;
   @ViewChild('taskNameInput') taskNameInput: ElementRef;
 
@@ -48,6 +49,7 @@ export class TaskAdderComponent implements OnInit {
 
   toggle() {
     this.withList = false;
+    this.withCounter = false;
     this.listName = null;
     this.newTaskName = null;
 
@@ -77,6 +79,9 @@ export class TaskAdderComponent implements OnInit {
             .toLowerCase(),
           showCount: false
         };
+      }
+      if (this.withCounter) {
+        task.counterCount = 0;
       }
       await this.tasksService.addTask(task);
       this.newTaskName = null;

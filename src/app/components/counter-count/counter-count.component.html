@@ -1,0 +1,19 @@
+<button mat-fab color="accent">
+  {{ counterCount }}
+</button>
+
+<button [@saveState]="'ready'" mat-fab (click)="save()" class="save-btn" color="primary">
+  <mat-icon>done</mat-icon>
+</button>
+
+<button [@cancelState]="'ready'" mat-fab (click)="cancel()" class="cancel-btn" color="warn">
+  <mat-icon>clear</mat-icon>
+</button>
+
+<button [@addState]="'ready'" mat-fab (click)="add()" class="add-btn" color="accent">
+  <mat-icon>add</mat-icon>
+</button>
+
+<button [@subtractState]="'ready'" mat-fab (click)="subtract()" class="subtract-btn" color="accent">
+  <mat-icon>remove</mat-icon>
+</button>

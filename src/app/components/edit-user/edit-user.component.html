@@ -1,0 +1,20 @@
+<div class="mat-dialog-content">
+  <form #editForm="ngForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="User Name" #nameCtrl="ngModel" required [(ngModel)]="username" name="name" />
+      <mat-error *ngIf="nameCtrl.hasError('required')">User Name is required</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div class="mat-dialog-actions">
+  <button
+    mat-raised-button
+    [disabled]="!editForm.dirty || !editForm.valid"
+    type="button"
+    (click)="apply()"
+  >
+    Apply Changes
+  </button>
+  <button mat-raised-button color="accent" type="button" (click)="closeDialog()">Cancel</button>
+</div>

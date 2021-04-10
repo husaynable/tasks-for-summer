@@ -5,6 +5,7 @@
   </mat-form-field>
   <div class="d-flex-center">
     <mat-checkbox [ngModel]="withList" (ngModelChange)="withListToggle($event)">With List</mat-checkbox> <span *ngIf="withList"><strong>{{ listName }}</strong></span>
+    <mat-checkbox [(ngModel)]="withCounter">With Counter</mat-checkbox>
   </div>
 </div>
 <div class="actions-wrapper">

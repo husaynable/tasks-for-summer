@@ -11,4 +11,5 @@ export interface Task {
   list?: ListModel;
   timestamp: firebase.firestore.Timestamp;
   userId?: string;
+  counterCount?: number;
 }
