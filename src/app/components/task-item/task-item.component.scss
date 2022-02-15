@@ -38,6 +38,13 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+  }
 }
 
 .task-name-span {
@@ -55,12 +62,12 @@
   font-size: 16pt;
 }
 
+.datepicker {
+  color: #007fff;
+}
+
 @media (max-width: 700px) {
   .task-name {
     flex-direction: column;
-  }
-
-  .items-button {
-    align-self: flex-end;
   }
 }

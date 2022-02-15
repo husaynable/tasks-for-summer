@@ -12,4 +12,5 @@ export interface Task {
   timestamp: firebase.firestore.Timestamp;
   userId?: string;
   counterCount?: number;
+  plannedDate?: firebase.firestore.Timestamp;
 }

@@ -6,9 +6,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ItemsListComponent } from '../items-list/items-list.component';
 import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-overlay.service';
 import { MatButton } from '@angular/material/button';
-import { ItemsType } from 'src/app/models/items.type';
 import { SubSink } from 'subsink';
-import { CounterOverlayService } from './../../services/counter-overlay.service';
+import { CounterOverlayService } from '../../services/counter-overlay.service';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import firebase from 'firebase/app';
+import { formatDistance } from 'date-fns';
 
 @Component({
   selector: 'app-task-item',
@@ -118,6 +120,15 @@ export class TaskItemComponent implements OnInit, OnDestroy {
         this.tasksService.updateTask(updatedTask);
       }
     });
+  }
+
+  setPlannedDate(e: MatDatepickerInputEvent<Date>) {
+    const updatedTask = { ...this.task, plannedDate: firebase.firestore.Timestamp.fromDate(e.value) };
+    this.tasksService.updateTask(updatedTask);
+  }
+
+  getDistance(plannedDate: Date): string {
+    return formatDistance(new Date(), plannedDate);
   }
 
   async changeTaskName(newName: string) {

@@ -11,7 +11,8 @@ import { MatListModule } from '@angular/material/list';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatRippleModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 const modules = [
   MatCheckboxModule,
   MatButtonModule,
@@ -25,7 +26,9 @@ const modules = [
   OverlayModule,
   MatProgressSpinnerModule,
   MatButtonToggleModule,
-  MatRippleModule
+  MatRippleModule,
+  MatNativeDateModule,
+  MatDatepickerModule
 ];
 
 @NgModule({
