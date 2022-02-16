@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger, keyframes } from '@angular/animations';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
@@ -35,27 +35,25 @@ import firebase from 'firebase/app';
     ])
   ]
 })
-export class TaskAdderComponent implements OnInit {
+export class TaskAdderComponent {
   inputState: 'hidden' | 'visible' = 'hidden';
-  newTaskName: string;
+  newTaskName?: string;
   withList = false;
   withCounter = false;
-  listName: string;
-  @ViewChild('taskNameInput') taskNameInput: ElementRef;
+  listName?: string;
+  @ViewChild('taskNameInput') taskNameInput?: ElementRef;
 
   constructor(private tasksService: TasksService, private modal: MatDialog) {}
-
-  ngOnInit() {}
 
   toggle() {
     this.withList = false;
     this.withCounter = false;
-    this.listName = null;
-    this.newTaskName = null;
+    this.listName = undefined;
+    this.newTaskName = undefined;
 
     if (this.inputState === 'hidden') {
       this.inputState = 'visible';
-      focusOnInput(this.taskNameInput.nativeElement);
+      focusOnInput(this.taskNameInput?.nativeElement);
     } else {
       this.inputState = 'hidden';
     }
@@ -74,7 +72,7 @@ export class TaskAdderComponent implements OnInit {
         task.list = {
           displayText: this.listName,
           name: this.listName
-            .trim()
+            ?.trim()
             .replace(' ', '_')
             .toLowerCase(),
           showCount: false
@@ -84,7 +82,7 @@ export class TaskAdderComponent implements OnInit {
         task.counterCount = 0;
       }
       await this.tasksService.addTask(task);
-      this.newTaskName = null;
+      this.newTaskName = undefined;
       this.toggle();
     }
   }

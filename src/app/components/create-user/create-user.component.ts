@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { NotifierService } from 'angular-notifier';
 import { Router } from '@angular/router';
@@ -7,22 +7,24 @@ import { Router } from '@angular/router';
   templateUrl: './create-user.component.html',
   styleUrls: ['./create-user.component.css']
 })
-export class CreateUserComponent implements OnInit {
-  login: string;
-  username: string;
-  password: string;
-  repeatPassword: string;
+export class CreateUserComponent {
+  login: string | undefined;
+  username: string | undefined;
+  password: string | undefined;
+  repeatPassword: string | undefined;
 
   constructor(private loginService: LoginService, private notify: NotifierService, private router: Router) {}
 
-  ngOnInit() {}
-
   createNew() {
+    if (!this.login || !this.password) {
+      return;
+    }
+
     this.loginService
       .createUser(this.login, this.password)
       .then(res => {
         res.user
-          .updateProfile({ displayName: this.username })
+          ?.updateProfile({ displayName: this.username })
           .then(() => {
             this.notify.notify('success', `User "${this.username}" is created successfully!`);
             this.router.navigateByUrl('/');

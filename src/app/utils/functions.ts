@@ -1,4 +1,7 @@
-export const focusOnInput = (el: HTMLInputElement) => {
+export const focusOnInput = (el?: HTMLInputElement) => {
+  if (!el) {
+    return;
+  }
   setTimeout(() => el.focus(), 0);
 };
 
@@ -18,6 +21,5 @@ export const b64toBlob = (b64Data: string, contentType = '', sliceSize = 512) =>
     byteArrays.push(byteArray);
   }
 
-  const blob = new Blob(byteArrays, { type: contentType });
-  return blob;
+  return new Blob(byteArrays, { type: contentType });
 };

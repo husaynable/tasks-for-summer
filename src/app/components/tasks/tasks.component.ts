@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -6,10 +6,8 @@ import { LoginService } from 'src/app/services/login.service';
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent {
   constructor(private loginService: LoginService) {}
-
-  ngOnInit() {}
 
   logout() {
     this.loginService.logOut();

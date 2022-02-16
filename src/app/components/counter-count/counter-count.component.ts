@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CounterOverlayRef } from '../../services/counter-overlay-ref';
 import { COUNTER_COUNT } from '../../utils/injection-tokens';
 
@@ -25,10 +25,8 @@ import { COUNTER_COUNT } from '../../utils/injection-tokens';
     ])
   ]
 })
-export class CounterCountComponent implements OnInit {
+export class CounterCountComponent {
   constructor(private dialogRef: CounterOverlayRef, @Inject(COUNTER_COUNT) public counterCount: number) {}
-
-  ngOnInit(): void {}
 
   save() {
     this.dialogRef.close(this.counterCount);

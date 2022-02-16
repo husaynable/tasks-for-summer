@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditUserComponent } from '../edit-user/edit-user.component';
@@ -8,12 +8,10 @@ import { EditUserComponent } from '../edit-user/edit-user.component';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
   @HostBinding('class') classes = '';
 
   constructor(private loginService: LoginService, private dialog: MatDialog) {}
-
-  ngOnInit(): void {}
 
   toggle() {
     if (this.classes === 'opened') {
