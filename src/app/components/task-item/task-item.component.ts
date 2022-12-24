@@ -2,10 +2,10 @@ import { Component, OnInit, Input, HostBinding, ViewChild, ElementRef, HostListe
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ItemsListComponent } from '../items-list/items-list.component';
 import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-overlay.service';
-import { MatButton } from '@angular/material/button';
+import { MatLegacyButton as MatButton } from '@angular/material/legacy-button';
 import { SubSink } from 'subsink';
 import { CounterOverlayService } from '../../services/counter-overlay.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';

@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger, keyframes } from '@angular/animations';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { Task } from '../../models/task.model';
 import firebase from 'firebase/app';

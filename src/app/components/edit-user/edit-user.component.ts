@@ -3,7 +3,7 @@ import { LoginService } from 'src/app/services/login.service';
 import firebase from 'firebase/app';
 import { NotifierService } from 'angular-notifier';
 import { SubSink } from 'subsink';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-edit-user',

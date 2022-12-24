@@ -1,6 +1,6 @@
 import { Component, HostBinding } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 
 @Component({

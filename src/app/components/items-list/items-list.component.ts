@@ -1,6 +1,10 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ItemModel } from 'src/app/models/item.model';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog
+} from '@angular/material/legacy-dialog';
 import { ItemsService } from 'src/app/services/items.service';
 import { Observable } from 'rxjs';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
