@@ -1,10 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import {
-  MatLegacyDialogRef as MatDialogRef,
-  MatLegacyDialog as MatDialog,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
-} from '@angular/material/legacy-dialog';
-import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/compat/storage';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
@@ -15,17 +11,18 @@ const uuid = require('uuid/v4');
 @Component({
   selector: 'app-name-getter',
   templateUrl: './name-getter.component.html',
-  styleUrls: ['./name-getter.component.css']
+  styleUrls: ['./name-getter.component.css'],
 })
 export class NameGetterComponent implements OnInit, OnDestroy {
   public hasAttachedPic = false;
-  selectedPic: File;
-  uploadPercent: Observable<number>;
-  isUploaded = false;
-  picRef: AngularFireStorageReference;
-  picUrl: string;
-  subSink = new SubSink();
-  hidePicAttachment = false;
+  public selectedPic?: File;
+  public uploadPercent?: Observable<number | undefined>;
+  public isUploaded = false;
+  public picUrl?: string;
+  public hidePicAttachment = false;
+
+  private subSink = new SubSink();
+  private picRef?: AngularFireStorageReference;
 
   constructor(
     private dialogRef: MatDialogRef<NameGetterComponent>,
@@ -41,7 +38,7 @@ export class NameGetterComponent implements OnInit, OnDestroy {
 
   picIsPicked(e: Event) {
     const target = e.target as HTMLInputElement;
-    const file = target.files.item(0);
+    const file = target.files?.item(0);
     if (file) {
       if (this.hasAttachedPic && this.picRef) {
         this.clearPic();
@@ -62,7 +59,7 @@ export class NameGetterComponent implements OnInit, OnDestroy {
         .snapshotChanges()
         .pipe(
           finalize(() => {
-            this.subSink.sink = this.picRef.getDownloadURL().subscribe(url => {
+            this.subSink.sink = this.picRef!.getDownloadURL().subscribe((url) => {
               this.isUploaded = true;
               this.picUrl = url;
             });
@@ -73,10 +70,12 @@ export class NameGetterComponent implements OnInit, OnDestroy {
   }
 
   clearPic() {
-    this.subSink.sink = this.picRef.delete().subscribe();
+    if (this.picRef) {
+      this.subSink.sink = this.picRef.delete().subscribe();
+    }
     this.isUploaded = false;
     this.hasAttachedPic = false;
-    this.picUrl = null;
+    this.picUrl = undefined;
   }
 
   close(name: string) {

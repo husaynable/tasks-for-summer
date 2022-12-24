@@ -1,36 +1,33 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
-import firebase from 'firebase/app';
-import { NotifierService } from 'angular-notifier';
+import firebase from 'firebase/compat/app';
 import { SubSink } from 'subsink';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.css']
+  styleUrls: ['./edit-user.component.css'],
 })
 export class EditUserComponent implements OnInit, OnDestroy {
-  username: string;
-  user: firebase.User;
-  subs: SubSink = new SubSink();
+  public username?: string | null;
 
-  constructor(
-    private loginService: LoginService,
-    private notifier: NotifierService,
-    private dialogRef: MatDialogRef<EditUserComponent>
-  ) {}
+  private user?: firebase.User | null;
+  private subs: SubSink = new SubSink();
+
+  constructor(private loginService: LoginService, private dialogRef: MatDialogRef<EditUserComponent>) {}
 
   ngOnInit(): void {
-    this.subs.sink = this.loginService.authState.subscribe(user => {
+    this.subs.sink = this.loginService.authState.subscribe((user) => {
       this.user = user;
-      this.username = user.displayName;
+      this.username = user?.displayName;
     });
   }
 
   apply() {
-    this.user.updateProfile({ displayName: this.username }).then(() => {
-      this.notifier.notify('success', 'Profile updated!');
+    this.user?.updateProfile({ displayName: this.username }).then(() => {
+      // TODO notify
+      // this.notifier.notify('success', 'Profile updated!');
     });
   }
 

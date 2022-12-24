@@ -2,10 +2,10 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger, keyframes } from '@angular/animations';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { Task } from '../../models/task.model';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-task-adder',
@@ -22,18 +22,18 @@ import firebase from 'firebase/app';
           keyframes([
             style({ transform: 'scale(0)', width: '*', height: '*', opacity: 0, offset: 0 }),
             style({ transform: 'scale(0.9)', opacity: 0.5, offset: 0.5 }),
-            style({ transform: 'scale(1)', opacity: 1, offset: 1 })
+            style({ transform: 'scale(1)', opacity: 1, offset: 1 }),
           ])
         )
       ),
-      transition('* => hidden', animate('225ms cubic-bezier(0, 0, 0.2, 1)', style({ opacity: 0 })))
+      transition('* => hidden', animate('225ms cubic-bezier(0, 0, 0.2, 1)', style({ opacity: 0 }))),
     ]),
     trigger('cancelBtnState', [
       state('initial, void, hidden', style({ transform: 'translateX(0)', opacity: 0 })),
       state('visible', style({ transform: 'translateX(-66px) rotate(-360deg)' })),
-      transition('hidden <=> visible', animate('225ms cubic-bezier(0, 0, 0.2, 1)'))
-    ])
-  ]
+      transition('hidden <=> visible', animate('225ms cubic-bezier(0, 0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class TaskAdderComponent {
   inputState: 'hidden' | 'visible' = 'hidden';
@@ -66,16 +66,13 @@ export class TaskAdderComponent {
       const task: Task = {
         name: this.newTaskName,
         isFinished: false,
-        timestamp: firebase.firestore.Timestamp.now()
+        timestamp: firebase.firestore.Timestamp.now(),
       };
       if (this.withList) {
         task.list = {
           displayText: this.listName,
-          name: this.listName
-            ?.trim()
-            .replace(' ', '_')
-            .toLowerCase(),
-          showCount: false
+          name: this.listName?.trim().replace(' ', '_').toLowerCase(),
+          showCount: false,
         };
       }
       if (this.withCounter) {
@@ -91,7 +88,7 @@ export class TaskAdderComponent {
     this.withList = checked;
     if (checked) {
       const dialogRef = this.modal.open(NameGetterComponent, { width: '400px', data: { hidePicAttachment: true } });
-      dialogRef.afterClosed().subscribe(nameModel => {
+      dialogRef.afterClosed().subscribe((nameModel) => {
         if (nameModel && nameModel.name) {
           this.listName = nameModel.name;
         } else {

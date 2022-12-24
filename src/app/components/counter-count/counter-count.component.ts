@@ -9,21 +9,21 @@ import { COUNTER_COUNT } from '../../utils/injection-tokens';
   animations: [
     trigger('saveState', [
       state('ready', style({ transform: 'translateX(20px)' })),
-      transition('* => ready', animate('325ms cubic-bezier(0, 0, 0.2, 1)'))
+      transition('* => ready', animate('325ms cubic-bezier(0, 0, 0.2, 1)')),
     ]),
     trigger('cancelState', [
       state('ready', style({ transform: 'translateX(-20px)' })),
-      transition('* => ready', animate('325ms cubic-bezier(0, 0, 0.2, 1)'))
+      transition('* => ready', animate('325ms cubic-bezier(0, 0, 0.2, 1)')),
     ]),
     trigger('addState', [
       state('ready', style({ transform: 'translateY(-20px)' })),
-      transition('* => ready', animate('325ms cubic-bezier(0, 0, 0.2, 1)'))
+      transition('* => ready', animate('325ms cubic-bezier(0, 0, 0.2, 1)')),
     ]),
     trigger('subtractState', [
       state('ready', style({ transform: 'translateY(20px)' })),
-      transition('* => ready', animate('325ms cubic-bezier(0, 0, 0.2, 1)'))
-    ])
-  ]
+      transition('* => ready', animate('325ms cubic-bezier(0, 0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class CounterCountComponent {
   constructor(private dialogRef: CounterOverlayRef, @Inject(COUNTER_COUNT) public counterCount: number) {}

@@ -4,34 +4,33 @@ import {
   AngularFirestoreCollection,
   DocumentReference,
   AngularFirestoreDocument,
-  CollectionReference
-} from '@angular/fire/firestore';
+  CollectionReference,
+} from '@angular/fire/compat/firestore';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Task } from '../models/task.model';
-import { NotifierService } from 'angular-notifier';
 import { environment } from '../../environments/environment';
 import { FilterType, SortModel } from '../components/order-by/order-by.component';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import { Counts } from './../models/counts.model';
 import { LoginService } from 'src/app/services/login.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TasksService {
   private tasksCollection: AngularFirestoreCollection<Task>;
   private tasks$: Subject<Task[]> = new Subject();
-  private tasksSub: Subscription;
+  private tasksSub?: Subscription;
   private currentSort: SortModel = {
     value: 'timestamp',
-    direction: 'desc'
+    direction: 'desc',
   };
   private currentFilter: FilterType = 'all';
   private initRef: CollectionReference<firebase.firestore.DocumentData>;
 
-  constructor(private db: AngularFirestore, private notifier: NotifierService, private loginService: LoginService) {
-    this.tasksCollection = db.collection<Task>(environment.collectionName, ref =>
+  constructor(private db: AngularFirestore, private loginService: LoginService) {
+    this.tasksCollection = db.collection<Task>(environment.collectionName, (ref) =>
       ref.orderBy('timestamp', 'desc').where('userId', '==', loginService.getUserId())
     );
     this.initRef = this.tasksCollection.ref;
@@ -44,14 +43,14 @@ export class TasksService {
 
   getCounts(): Observable<Counts> {
     return this.db
-      .collection<Task>(environment.collectionName, ref => ref.where('userId', '==', this.loginService.getUserId()))
+      .collection<Task>(environment.collectionName, (ref) => ref.where('userId', '==', this.loginService.getUserId()))
       .valueChanges()
       .pipe(
-        map(tasks => {
+        map((tasks) => {
           return {
             all: tasks.length,
-            finished: tasks.filter(t => t.isFinished).length,
-            notFinished: tasks.filter(t => !t.isFinished).length
+            finished: tasks.filter((t) => t.isFinished).length,
+            notFinished: tasks.filter((t) => !t.isFinished).length,
           };
         })
       );
@@ -59,16 +58,18 @@ export class TasksService {
 
   addTask(task: Task): Promise<DocumentReference> {
     task.userId = this.loginService.getUserId();
-    return this.tasksCollection.add(task).then(res => {
-      this.notifier.notify('success', 'New Task for Summer is added!');
+    return this.tasksCollection.add(task).then((res) => {
+      // TODO notify
+      // this.notifier.notify('success', 'New Task for Summer is added!');
       return res;
     });
   }
 
   updateTask(task: Task): Promise<void> {
-    const taskDoc = this.getDoc(task.id);
-    return taskDoc.update(task).then(res => {
-      this.notifier.notify('success', 'Task for Summer is updated!');
+    const taskDoc = this.getDoc(task.id!);
+    return taskDoc.update(task).then((res) => {
+      // TODO notify
+      // this.notifier.notify('success', 'Task for Summer is updated!');
       return res;
     });
   }
@@ -76,7 +77,8 @@ export class TasksService {
   delete(taskId: string): Promise<void> {
     const taskDoc = this.getDoc(taskId);
     return taskDoc.delete().then(() => {
-      this.notifier.notify('success', 'Task for Summer is deleted!');
+      // TODO notify
+      // this.notifier.notify('success', 'Task for Summer is deleted!');
     });
   }
 
@@ -109,7 +111,7 @@ export class TasksService {
     if (this.tasksSub) {
       this.tasksSub.unsubscribe();
     }
-    this.tasksSub = this.tasksCollection.valueChanges({ idField: 'id' }).subscribe(data => this.tasks$.next(data));
+    this.tasksSub = this.tasksCollection.valueChanges({ idField: 'id' }).subscribe((data) => this.tasks$.next(data));
   }
 
   private getDoc(taskId: string): AngularFirestoreDocument<Task> {

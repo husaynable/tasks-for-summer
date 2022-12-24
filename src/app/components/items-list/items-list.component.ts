@@ -1,30 +1,27 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ItemModel } from 'src/app/models/item.model';
-import {
-  MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-  MatLegacyDialog as MatDialog
-} from '@angular/material/legacy-dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { ItemsService } from 'src/app/services/items.service';
 import { Observable } from 'rxjs';
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { CreateItemModel } from 'src/app/models/create-item.model';
 import { SubSink } from 'subsink';
 import { ItemsType } from 'src/app/models/items.type';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-items-list',
   templateUrl: './items-list.component.html',
-  styleUrls: ['./items-list.component.css']
+  styleUrls: ['./items-list.component.css'],
 })
 export class ItemsListComponent implements OnInit, OnDestroy {
-  items$: Observable<ItemModel[]>;
-  subs = new SubSink();
-  captions = {
+  public items$?: Observable<ItemModel[]>;
+  public captions = {
     movies: 'Movies List',
-    drinks: 'Drunk Drinks'
+    drinks: 'Drunk Drinks',
   };
+
+  private subs = new SubSink();
 
   constructor(
     public dialogRef: MatDialogRef<ItemsListComponent>,
@@ -41,7 +38,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   openNameGetter() {
     const dialogRef = this.modal.open(NameGetterComponent, {
       width: '400px',
-      data: { hidePicAttachment: false }
+      data: { hidePicAttachment: false },
     });
 
     this.subs.sink = dialogRef.afterClosed().subscribe((newItem: CreateItemModel) => {
@@ -55,7 +52,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     const newItem: ItemModel = {
       name,
       timestamp: firebase.firestore.Timestamp.now(),
-      type: this.data.itemsType
+      type: this.data.itemsType,
     };
     if (attachUrl) {
       newItem.attachmentUrl = attachUrl;
@@ -72,8 +69,10 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     anchorEl.remove();
   }
 
-  deleteItem(itemId: string) {
-    this.itemsService.removeItem(itemId);
+  deleteItem(itemId?: string) {
+    if (itemId) {
+      this.itemsService.removeItem(itemId);
+    }
   }
 
   close() {

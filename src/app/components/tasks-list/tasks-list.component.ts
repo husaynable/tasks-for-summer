@@ -21,26 +21,25 @@ import { FilterType, SortModel } from '../order-by/order-by.component';
           ':enter',
           [
             style({ opacity: 0, transform: 'translateX(-50%)' }),
-            stagger(30, [animate('0.2s ease-in', style({ opacity: 1, transform: 'translateX(0)' }))])
+            stagger(30, [animate('0.2s ease-in', style({ opacity: 1, transform: 'translateX(0)' }))]),
           ],
           { optional: true }
-        )
-      ])
-    ])
+        ),
+      ]),
+    ]),
   ],
   styleUrls: ['./tasks-list.component.css'],
-  providers: [TasksService]
 })
 export class TasksListComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'app-tasks-list container';
   tasks: Task[] = [];
-  tasksSub: Subscription;
+  tasksSub!: Subscription;
   tasksLength = 0;
 
   constructor(private tasksService: TasksService) {}
 
   ngOnInit() {
-    this.tasksSub = this.tasksService.getTasks().subscribe(tasks => {
+    this.tasksSub = this.tasksService.getTasks().subscribe((tasks) => {
       this.tasks = tasks;
       this.tasksLength = tasks.length;
     });

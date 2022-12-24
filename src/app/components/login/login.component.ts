@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   login?: string;
@@ -18,7 +18,7 @@ export class LoginComponent {
       return;
     }
 
-    this.loginService.login(this.login, this.password).then(credentials => {
+    this.loginService.login(this.login, this.password).then((credentials) => {
       if (credentials && credentials.user) {
         this.loginService.setUserId(credentials.user.uid);
         this.router.navigate(['']);

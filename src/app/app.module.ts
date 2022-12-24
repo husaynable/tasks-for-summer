@@ -3,11 +3,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
@@ -22,20 +21,6 @@ import { FedCatsCounterComponent } from './components/fed-cats-counter/fed-cats-
 import { EqualDirective } from './directives/validate-equal.directive';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 
-const notifierConfig: NotifierOptions = {
-  position: {
-    horizontal: {
-      position: 'right',
-      distance: 12
-    },
-    vertical: {
-      position: 'top',
-      distance: 12,
-      gap: 10
-    }
-  }
-};
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,34 +29,29 @@ const notifierConfig: NotifierOptions = {
     NameGetterComponent,
     FedCatsCounterComponent,
     EqualDirective,
-    CreateUserComponent
+    CreateUserComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(
-      [
-        {
-          path: '',
-          loadChildren: () => import('./modules/tasks.module').then(m => m.TasksModule),
-          canActivate: [LoginGuard]
-        },
-        { path: 'login', component: LoginComponent },
-        { path: 'create-user', component: CreateUserComponent }
-      ],
-      { relativeLinkResolution: 'legacy' }
-    ),
+    RouterModule.forRoot([
+      {
+        path: '',
+        loadChildren: () => import('./modules/tasks.module').then((m) => m.TasksModule),
+        canActivate: [LoginGuard],
+      },
+      { path: 'login', component: LoginComponent },
+      { path: 'create-user', component: CreateUserComponent },
+    ]),
     FormsModule,
     MaterialModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    AngularFireStorageModule,
-    NotifierModule.withConfig(notifierConfig),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
+    provideStorage(() => getStorage()),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ItemsListComponent, NameGetterComponent, FedCatsCounterComponent]
 })
 export class AppModule {}

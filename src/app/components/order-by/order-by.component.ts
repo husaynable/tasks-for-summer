@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { TasksService } from 'src/app/services/tasks.service';
 import { Observable } from 'rxjs';
@@ -7,16 +7,16 @@ import { Counts } from '../../models/counts.model';
 @Component({
   selector: 'app-order-by',
   templateUrl: './order-by.component.html',
-  styleUrls: ['./order-by.component.scss']
+  styleUrls: ['./order-by.component.scss'],
 })
 export class OrderByComponent implements OnInit {
-  @Output() changed = new EventEmitter<SortModel>();
-  @Output() filterChanged = new EventEmitter<FilterType>();
+  @Output() public changed = new EventEmitter<SortModel>();
+  @Output() public filterChanged = new EventEmitter<FilterType>();
 
-  currentValue: 'timestamp' | 'name' = 'timestamp';
-  currentDirection: 'asc' | 'desc' = 'desc';
-  filter: FilterType = 'all';
-  counts$: Observable<Counts>;
+  public currentValue: 'timestamp' | 'name' = 'timestamp';
+  public currentDirection: 'asc' | 'desc' = 'desc';
+  public filter: FilterType = 'all';
+  public counts$!: Observable<Counts>;
 
   constructor(private tasksService: TasksService) {}
 

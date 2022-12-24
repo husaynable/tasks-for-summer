@@ -25,8 +25,13 @@ import { CounterCountComponent } from '../components/counter-count/counter-count
     OrderByComponent,
     SettingsComponent,
     EditUserComponent,
-    CounterCountComponent
+    CounterCountComponent,
   ],
-  imports: [CommonModule, FormsModule, RouterModule.forChild([{ path: '', component: TasksComponent }]), MaterialModule]
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild([{ path: '', component: TasksComponent }]),
+    MaterialModule,
+  ],
 })
 export class TasksModule {}

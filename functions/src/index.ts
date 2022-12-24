@@ -10,20 +10,16 @@ interface DocData {
 const values: { [name: string]: DocData } = {
   drinks: {
     docPath: '/tasks-test/48K5RTbAc5vbNwcDSyGu',
-    fieldName: 'drunkDrinks'
+    fieldName: 'drunkDrinks',
   },
   movies: {
     docPath: '/tasks-test/cwgY884Viawk4zXwp8iR',
-    fieldName: 'watchedMovies'
-  }
+    fieldName: 'watchedMovies',
+  },
 };
 
 const doEverithing = async ({ docPath, fieldName }: DocData, itemType: 'drinks' | 'movies') => {
-  const query = await admin
-    .firestore()
-    .collection('items')
-    .where('type', '==', itemType)
-    .get();
+  const query = await admin.firestore().collection('items').where('type', '==', itemType).get();
   const currCount = query.size; // ((await doc.get()).data() as FirebaseFirestore.DocumentData)[fieldName];
 
   const doc = admin.firestore().doc(docPath);
@@ -42,10 +38,7 @@ export const onDelete = functions.firestore.document('/items/{itemId}').onDelete
   if (snapData) {
     const attachmentUrl = snapData.attachmentUrl;
     if (attachmentUrl) {
-      const fileName = attachmentUrl
-        .split('?')[0]
-        .split('/')
-        .pop();
+      const fileName = attachmentUrl.split('?')[0].split('/').pop();
       if (fileName !== undefined) {
         admin
           .storage()

@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-tasks-count',
   templateUrl: './tasks-count.component.html',
-  styleUrls: ['./tasks-count.component.scss']
+  styleUrls: ['./tasks-count.component.scss'],
 })
 export class TasksCountComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'mat-elevation-z3';
@@ -15,14 +15,14 @@ export class TasksCountComponent implements OnInit, OnDestroy {
   finishedTasksCount = 0;
   pageOffset = 0;
 
-  tasksSub$: Subscription;
+  tasksSub$!: Subscription;
 
   constructor(private tasksService: TasksService) {}
 
   ngOnInit() {
-    this.tasksSub$ = this.tasksService.getTasks().subscribe(tasks => {
+    this.tasksSub$ = this.tasksService.getTasks().subscribe((tasks) => {
       this.allTasksCount = tasks.length;
-      this.finishedTasksCount = tasks.filter(t => t.isFinished).length;
+      this.finishedTasksCount = tasks.filter((t) => t.isFinished).length;
     });
   }
 

@@ -7,6 +7,6 @@ export const environment = {
     databaseURL: 'https://tasks-for-summer.firebaseio.com',
     projectId: 'tasks-for-summer',
     storageBucket: 'tasks-for-summer.appspot.com',
-    messagingSenderId: '1039645191162'
-  }
+    messagingSenderId: '1039645191162',
+  },
 };

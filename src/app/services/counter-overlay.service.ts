@@ -9,7 +9,7 @@ import { CounterCountComponent } from './../components/counter-count/counter-cou
 export class CounterOverlayService {
   constructor(private overlay: Overlay) {}
 
-  open(elemRef: ElementRef, counterCount: number) {
+  open(elemRef: ElementRef, counterCount?: number) {
     const overlayRef = this.overlay.create({
       positionStrategy: this.overlay
         .position()
@@ -18,12 +18,12 @@ export class CounterOverlayService {
           new ConnectionPositionPair(
             { originX: 'center', originY: 'center' },
             { overlayX: 'center', overlayY: 'center' }
-          )
+          ),
         ])
         .withPush(true),
       scrollStrategy: this.overlay.scrollStrategies.block(),
       hasBackdrop: true,
-      backdropClass: 'black-back'
+      backdropClass: 'black-back',
     });
 
     const dialogRef = new CounterOverlayRef(overlayRef);
@@ -38,14 +38,14 @@ export class CounterOverlayService {
     return dialogRef;
   }
 
-  private createInjector(count: number, dialogRef: CounterOverlayRef): Injector {
+  private createInjector(count: number | undefined, dialogRef: CounterOverlayRef): Injector {
     const countProvider: StaticProvider = {
       provide: COUNTER_COUNT,
-      useValue: count
+      useValue: count,
     };
     const overlayRefProvider: StaticProvider = {
       provide: CounterOverlayRef,
-      useValue: dialogRef
+      useValue: dialogRef,
     };
     return Injector.create({ providers: [countProvider, overlayRefProvider] });
   }

@@ -3,7 +3,7 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 
 @Directive({
   selector: '[appValidateEqual][ngModel]',
-  providers: [{ provide: NG_VALIDATORS, useExisting: forwardRef(() => EqualDirective), multi: true }]
+  providers: [{ provide: NG_VALIDATORS, useExisting: forwardRef(() => EqualDirective), multi: true }],
 })
 export class EqualDirective implements Validator {
   constructor(@Attribute('appValidateEqual') private validateEqual: string) {}
@@ -14,7 +14,7 @@ export class EqualDirective implements Validator {
 
     if (self && anotherVal && self !== anotherVal) {
       return {
-        validateEqual: true
+        validateEqual: true,
       };
     } else {
       return {};

@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { LoginService } from '../services/login.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginGuard implements CanActivate {
   constructor(private loginService: LoginService, private router: Router) {}
@@ -15,7 +15,7 @@ export class LoginGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.loginService.authState.pipe(
-      map(user => {
+      map((user) => {
         if (!user) {
           this.router.navigate(['/login']);
           return false;

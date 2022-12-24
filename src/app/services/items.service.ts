@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ItemModel } from '../models/item.model';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import firebase from 'firebase/app';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemsService {
   itemsCollection: AngularFirestoreCollection<ItemModel>;
@@ -18,7 +16,7 @@ export class ItemsService {
 
   getItems(itemsType: string): Observable<ItemModel[]> {
     return this.db
-      .collection<ItemModel>('items', ref => ref.where('type', '==', itemsType).orderBy('timestamp'))
+      .collection<ItemModel>('items', (ref) => ref.where('type', '==', itemsType).orderBy('timestamp'))
       .valueChanges({ idField: 'id' });
   }
 

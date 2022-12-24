@@ -13,8 +13,8 @@ export const environment = {
     storageBucket: 'tasks-for-summer-dev.appspot.com',
     messagingSenderId: '273164399132',
     appId: '1:273164399132:web:8e82764f88823c258c25d9',
-    measurementId: 'G-6Q9DEPF1M4'
-  }
+    measurementId: 'G-6Q9DEPF1M4',
+  },
 };
 
 /*

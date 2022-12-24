@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, Injector } from '@angular/core';
+import { Injectable, ElementRef, Injector, StaticProvider } from '@angular/core';
 import { Overlay, ConnectionPositionPair } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
 import { FedCatsCounterComponent } from '../components/fed-cats-counter/fed-cats-counter.component';
@@ -6,12 +6,12 @@ import { FedCatsCounterOverlayRef } from './fed-cats-counter-overlay-ref';
 import { FED_CATS_COUNT } from '../utils/injection-tokens';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FedCatsCounterOverlayService {
   constructor(private overlay: Overlay, private injector: Injector) {}
 
-  open(elemRef: ElementRef, fedCatsCount: number): FedCatsCounterOverlayRef {
+  open(elemRef: ElementRef, fedCatsCount?: number): FedCatsCounterOverlayRef {
     const overlayRef = this.overlay.create({
       positionStrategy: this.overlay
         .position()
@@ -20,12 +20,12 @@ export class FedCatsCounterOverlayService {
           new ConnectionPositionPair(
             { originX: 'center', originY: 'center' },
             { overlayX: 'center', overlayY: 'center' }
-          )
+          ),
         ])
         .withPush(true),
       scrollStrategy: this.overlay.scrollStrategies.block(),
       hasBackdrop: true,
-      backdropClass: 'black-back'
+      backdropClass: 'black-back',
     });
 
     const dialogRef = new FedCatsCounterOverlayRef(overlayRef);
@@ -35,17 +35,26 @@ export class FedCatsCounterOverlayService {
 
     overlayRef.attach(catsCounterPortal);
 
-    overlayRef.backdropClick().subscribe(_ => overlayRef.dispose());
+    overlayRef.backdropClick().subscribe((_) => overlayRef.dispose());
 
     return dialogRef;
   }
 
-  private createInjector(fedCatsCount: number, dialogRef: FedCatsCounterOverlayRef): PortalInjector {
-    const injectionTokens = new WeakMap();
+  private createInjector(fedCatsCount: number | undefined, dialogRef: FedCatsCounterOverlayRef): Injector {
+    const injectionTokens: StaticProvider[] = [
+      {
+        provide: FED_CATS_COUNT,
+        useValue: fedCatsCount,
+      },
+      {
+        provide: FedCatsCounterOverlayRef,
+        useValue: dialogRef,
+      },
+    ];
 
-    injectionTokens.set(FED_CATS_COUNT, fedCatsCount);
-    injectionTokens.set(FedCatsCounterOverlayRef, dialogRef);
-
-    return new PortalInjector(this.injector, injectionTokens);
+    return Injector.create({
+      providers: injectionTokens,
+      parent: this.injector,
+    });
   }
 }
