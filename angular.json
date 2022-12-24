@@ -142,9 +142,10 @@
       }
     }
   },
-  "defaultProject": "tasks-for-summer",
   "cli": {
     "analytics": "45694737-ddf4-4397-9d8e-35288b5fb96e",
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }
