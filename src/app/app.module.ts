@@ -20,6 +20,7 @@ import { NameGetterComponent } from './components/name-getter/name-getter.compon
 import { FedCatsCounterComponent } from './components/fed-cats-counter/fed-cats-counter.component';
 import { EqualDirective } from './directives/validate-equal.directive';
 import { CreateUserComponent } from './components/create-user/create-user.component';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,12 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
     provideStorage(() => getStorage()),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: FIREBASE_OPTIONS,
+      useValue: environment.firebaseConfig,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -4,9 +4,9 @@ import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/c
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
+import { v4 as uuidv4 } from 'uuid';
 
 declare var require: any;
-const uuid = require('uuid/v4');
 
 @Component({
   selector: 'app-name-getter',
@@ -48,7 +48,7 @@ export class NameGetterComponent implements OnInit, OnDestroy {
       this.selectedPic = file;
 
       const fileExt = file.name.split('.').pop();
-      const id = uuid();
+      const id = uuidv4();
       const filePath = `${id}.${fileExt}`;
 
       this.picRef = this.storage.ref(filePath);

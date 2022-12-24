@@ -95,7 +95,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  openItemsList(itemsName: string) {
+  openItemsList(itemsName?: string) {
     this.dialog.open(ItemsListComponent, {
       width: '90%',
       data: { itemsType: itemsName },

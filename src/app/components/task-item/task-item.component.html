@@ -66,7 +66,7 @@
 <!-- <div>{{ holdingProgress }}</div> -->
 
 <div class="task-edit-actions" *ngIf="isEditing">
-  <button mat-icon-button (click)="changeTaskName(nameInput.nativeElement.value)">
+  <button mat-icon-button (click)="changeTaskName(nameInput?.nativeElement.value)">
     <mat-icon>done</mat-icon>
   </button>
   <button mat-icon-button (click)="changeMode(false)">
