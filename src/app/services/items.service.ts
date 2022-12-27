@@ -1,35 +1,48 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ItemModel } from '../models/item.model';
 import { Observable } from 'rxjs';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import {
+  collection,
+  collectionData,
+  CollectionReference,
+  Firestore,
+  addDoc,
+  where,
+  orderBy,
+  query,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ItemsService {
-  itemsCollection: AngularFirestoreCollection<ItemModel>;
+  itemsCollection: CollectionReference<ItemModel>;
 
-  constructor(private db: AngularFirestore, private storage: AngularFireStorage) {
-    this.itemsCollection = db.collection('items');
+  constructor(db: Firestore) {
+    this.itemsCollection = collection(db, 'items') as CollectionReference<ItemModel>;
   }
 
   getItems(itemsType: string): Observable<ItemModel[]> {
-    return this.db
-      .collection<ItemModel>('items', (ref) => ref.where('type', '==', itemsType).orderBy('timestamp'))
-      .valueChanges({ idField: 'id' });
+    const wh = where('type', '==', itemsType);
+    const ordBy = orderBy('timestamp');
+    const q = query<ItemModel>(this.itemsCollection, wh, ordBy);
+    return collectionData<ItemModel>(q, { idField: 'id' });
   }
 
   addItem(item: ItemModel) {
-    return this.itemsCollection.add(item);
+    return addDoc(this.itemsCollection, item);
   }
 
   updateItem(item: ItemModel) {
-    return this.itemsCollection.doc(item.id).update(item);
+    const dRef = doc(this.itemsCollection, item.id);
+    return updateDoc(dRef, item);
   }
 
-  removeItem(itemId: string, attachmentRef?: string) {
-    const doc = this.itemsCollection.doc(itemId);
-    return doc.delete();
+  removeItem(itemId: string) {
+    const dRef = doc(this.itemsCollection, itemId);
+    return deleteDoc(dRef);
   }
 }

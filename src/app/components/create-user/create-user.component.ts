@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
+import { updateProfile } from '@angular/fire/auth';
 
 @Component({
   templateUrl: './create-user.component.html',
@@ -22,8 +23,7 @@ export class CreateUserComponent {
     this.loginService
       .createUser(this.login, this.password)
       .then((res) => {
-        res.user
-          ?.updateProfile({ displayName: this.username })
+        updateProfile(res.user, { displayName: this.username })
           .then(() => {
             // TODO notify
             // this.notify.notify('success', `User "${this.username}" is created successfully!`);

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { ref, Storage, uploadBytes } from '@angular/fire/storage';
 
 @Injectable()
 export class StorageService {
-  constructor(private storage: AngularFireStorage) {}
+  constructor(private storage: Storage) {}
 
   updload(itemType: 'drinks' | 'movies', file: File) {
     const fileExt = file.name.split('.').pop();
     const date = new Date().toLocaleString();
-    const imgRef = this.storage.ref(`${itemType}/${date}.${fileExt}`);
-    return imgRef.put(file).snapshotChanges();
+    const imgRef = ref(this.storage, `${itemType}/${date}.${fileExt}`);
+    return uploadBytes(imgRef, file);
   }
 }

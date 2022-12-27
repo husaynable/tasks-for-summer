@@ -1,4 +1,4 @@
-import firebase from 'firebase/compat/app';
+import { Timestamp } from '@angular/fire/firestore';
 import { ListModel } from './list.model';
 
 export interface Task {
@@ -9,8 +9,8 @@ export interface Task {
   watchedMovies?: number;
   countOfFedCats?: number;
   list?: ListModel;
-  timestamp: firebase.firestore.Timestamp;
+  timestamp: Timestamp;
   userId?: string;
   counterCount?: number;
-  plannedDate?: firebase.firestore.Timestamp;
+  plannedDate?: Timestamp;
 }

@@ -1,13 +1,15 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { ItemModel } from 'src/app/models/item.model';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { ItemsService } from 'src/app/services/items.service';
+import { Timestamp } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { NameGetterComponent } from '../name-getter/name-getter.component';
-import { CreateItemModel } from 'src/app/models/create-item.model';
 import { SubSink } from 'subsink';
+
+import { ItemModel } from 'src/app/models/item.model';
+import { ItemsService } from 'src/app/services/items.service';
+import { CreateItemModel } from 'src/app/models/create-item.model';
 import { ItemsType } from 'src/app/models/items.type';
-import firebase from 'firebase/compat/app';
+
+import { NameGetterComponent } from '../name-getter/name-getter.component';
 
 @Component({
   selector: 'app-items-list',
@@ -51,7 +53,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   addItem(name: string, attachUrl?: string) {
     const newItem: ItemModel = {
       name,
-      timestamp: firebase.firestore.Timestamp.now(),
+      timestamp: Timestamp.now(),
       type: this.data.itemsType,
     };
     if (attachUrl) {

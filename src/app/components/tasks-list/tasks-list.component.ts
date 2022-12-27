@@ -1,8 +1,10 @@
-import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { TasksService } from 'src/app/services/tasks.service';
-import { Observable, Subscription } from 'rxjs';
-import { Task } from 'src/app/models/task.model';
 import { trigger, transition, query, stagger, animate, style } from '@angular/animations';
+import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import { TasksService } from 'src/app/services/tasks.service';
+import { Task } from 'src/app/models/task.model';
+
 import { FilterType, SortModel } from '../order-by/order-by.component';
 
 @Component({

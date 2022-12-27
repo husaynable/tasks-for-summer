@@ -10,7 +10,6 @@ import { MaterialModule } from '../material.module';
 import { RouterModule } from '@angular/router';
 import { TasksCountComponent } from '../components/tasks-count/tasks-count.component';
 import { OrderByComponent } from '../components/order-by/order-by.component';
-import { EqualDirective } from '../directives/validate-equal.directive';
 import { SettingsComponent } from '../components/settings/settings.component';
 import { EditUserComponent } from '../components/edit-user/edit-user.component';
 import { CounterCountComponent } from '../components/counter-count/counter-count.component';

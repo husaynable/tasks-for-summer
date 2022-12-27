@@ -1,11 +1,13 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger, keyframes } from '@angular/animations';
+import { MatDialog } from '@angular/material/dialog';
+import { Timestamp } from '@angular/fire/firestore';
+
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
-import { MatDialog } from '@angular/material/dialog';
+
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { Task } from '../../models/task.model';
-import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-task-adder',
@@ -66,7 +68,7 @@ export class TaskAdderComponent {
       const task: Task = {
         name: this.newTaskName,
         isFinished: false,
-        timestamp: firebase.firestore.Timestamp.now(),
+        timestamp: Timestamp.now(),
       };
       if (this.withList) {
         task.list = {

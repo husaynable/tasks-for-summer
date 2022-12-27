@@ -1,12 +1,18 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/compat/storage';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import {
+  percentage,
+  ref,
+  Storage,
+  StorageReference,
+  getDownloadURL,
+  uploadBytesResumable,
+  deleteObject,
+} from '@angular/fire/storage';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { v4 as uuidv4 } from 'uuid';
-
-declare var require: any;
 
 @Component({
   selector: 'app-name-getter',
@@ -22,14 +28,13 @@ export class NameGetterComponent implements OnInit, OnDestroy {
   public hidePicAttachment = false;
 
   private subSink = new SubSink();
-  private picRef?: AngularFireStorageReference;
+  private picRef?: StorageReference;
 
   constructor(
     private dialogRef: MatDialogRef<NameGetterComponent>,
     @Inject(MAT_DIALOG_DATA)
     private data: { hidePicAttachment: boolean },
-    private modal: MatDialog,
-    private storage: AngularFireStorage
+    private storage: Storage
   ) {}
 
   ngOnInit() {
@@ -51,27 +56,21 @@ export class NameGetterComponent implements OnInit, OnDestroy {
       const id = uuidv4();
       const filePath = `${id}.${fileExt}`;
 
-      this.picRef = this.storage.ref(filePath);
-      const task = this.storage.upload(filePath, file);
+      this.picRef = ref(this.storage, filePath);
+      const task = uploadBytesResumable(this.picRef, file);
 
-      this.uploadPercent = task.percentageChanges();
-      this.subSink.sink = task
-        .snapshotChanges()
-        .pipe(
-          finalize(() => {
-            this.subSink.sink = this.picRef!.getDownloadURL().subscribe((url) => {
-              this.isUploaded = true;
-              this.picUrl = url;
-            });
-          })
-        )
-        .subscribe();
+      this.uploadPercent = percentage(task).pipe(map((progressObj) => progressObj.progress));
+      task.then(async () => {
+        const url = await getDownloadURL(this.picRef!);
+        this.isUploaded = true;
+        this.picUrl = url;
+      });
     }
   }
 
   clearPic() {
     if (this.picRef) {
-      this.subSink.sink = this.picRef.delete().subscribe();
+      deleteObject(this.picRef);
     }
     this.isUploaded = false;
     this.hasAttachedPic = false;

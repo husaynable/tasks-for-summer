@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
-import firebase from 'firebase/compat/app';
 import { SubSink } from 'subsink';
 import { MatDialogRef } from '@angular/material/dialog';
+import { updateProfile, User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-edit-user',
@@ -12,7 +12,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class EditUserComponent implements OnInit, OnDestroy {
   public username?: string | null;
 
-  private user?: firebase.User | null;
+  private user?: User | null;
   private subs: SubSink = new SubSink();
 
   constructor(private loginService: LoginService, private dialogRef: MatDialogRef<EditUserComponent>) {}
@@ -25,7 +25,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   }
 
   apply() {
-    this.user?.updateProfile({ displayName: this.username }).then(() => {
+    updateProfile(this.user!, { displayName: this.username }).then(() => {
       // TODO notify
       // this.notifier.notify('success', 'Profile updated!');
     });

@@ -1,9 +1,9 @@
-import firebase from 'firebase/compat/app';
+import { Timestamp } from '@angular/fire/firestore';
 
 export interface ItemModel {
   id?: string;
   name: string;
-  timestamp: firebase.firestore.Timestamp;
+  timestamp: Timestamp;
   type: string;
   attachmentUrl?: string;
 }

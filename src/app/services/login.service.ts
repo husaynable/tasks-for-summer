@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import firebase from 'firebase/compat/app';
 import { map } from 'rxjs/operators';
+import {
+  Auth,
+  authState,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  User,
+  UserCredential,
+} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -11,19 +17,18 @@ import { map } from 'rxjs/operators';
 export class LoginService {
   private userId?: string;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {}
+  constructor(private afAuth: Auth, private router: Router) {}
 
   get isAuth(): Observable<boolean> {
-    return this.afAuth.user.pipe(map((u) => !!u));
+    return authState(this.afAuth).pipe(map((u) => !!u));
   }
 
-  get authState(): Observable<firebase.User | null> {
-    return this.afAuth.authState;
+  get authState(): Observable<User | null> {
+    return authState(this.afAuth);
   }
 
-  login(login: string, password: string): Promise<firebase.auth.UserCredential | null> {
-    return this.afAuth
-      .signInWithEmailAndPassword(login, password)
+  login(login: string, password: string): Promise<UserCredential | null> {
+    return signInWithEmailAndPassword(this.afAuth, login, password)
       .then((creds) => {
         if (creds) {
           // TODO: notify
@@ -49,7 +54,7 @@ export class LoginService {
   }
 
   createUser(email: string, password: string) {
-    return this.afAuth.createUserWithEmailAndPassword(email, password);
+    return createUserWithEmailAndPassword(this.afAuth, email, password);
   }
 
   getUserId() {

@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FedCatsCounterOverlayRef } from 'src/app/services/fed-cats-counter-overlay-ref';
 import { trigger, transition, animate, style, state } from '@angular/animations';
+
+import { FedCatsCounterOverlayRef } from 'src/app/services/fed-cats-counter-overlay-ref';
 import { FED_CATS_COUNT } from 'src/app/utils/injection-tokens';
 
 @Component({

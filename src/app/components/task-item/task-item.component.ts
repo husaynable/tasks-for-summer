@@ -1,16 +1,18 @@
 import { Component, OnInit, Input, HostBinding, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { formatDistance } from 'date-fns';
+import { SubSink } from 'subsink';
+
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
-import { MatDialog } from '@angular/material/dialog';
-import { ItemsListComponent } from '../items-list/items-list.component';
 import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-overlay.service';
-import { MatButton } from '@angular/material/button';
-import { SubSink } from 'subsink';
+
+import { ItemsListComponent } from '../items-list/items-list.component';
 import { CounterOverlayService } from '../../services/counter-overlay.service';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import firebase from 'firebase/compat/app';
-import { formatDistance } from 'date-fns';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-task-item',
@@ -123,7 +125,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   }
 
   setPlannedDate(e: MatDatepickerInputEvent<Date>) {
-    const updatedTask = { ...this.task, plannedDate: firebase.firestore.Timestamp.fromDate(e.value ?? new Date()) };
+    const updatedTask = { ...this.task, plannedDate: Timestamp.fromDate(e.value ?? new Date()) };
     this.tasksService.updateTask(updatedTask);
   }
 

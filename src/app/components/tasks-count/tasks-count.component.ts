@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TasksService } from 'src/app/services/tasks.service';
-import { Subscription, fromEvent } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tasks-count',

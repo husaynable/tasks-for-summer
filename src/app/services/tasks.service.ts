@@ -1,25 +1,34 @@
 import { Injectable } from '@angular/core';
 import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  DocumentReference,
-  AngularFirestoreDocument,
+  addDoc,
+  collection,
+  collectionData,
   CollectionReference,
-} from '@angular/fire/compat/firestore';
+  deleteDoc,
+  doc,
+  DocumentReference,
+  Firestore,
+  orderBy,
+  Query,
+  query,
+  updateDoc,
+  where,
+} from '@angular/fire/firestore';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { LoginService } from 'src/app/services/login.service';
+
 import { Task } from '../models/task.model';
 import { environment } from '../../environments/environment';
 import { FilterType, SortModel } from '../components/order-by/order-by.component';
-import firebase from 'firebase/compat/app';
 import { Counts } from './../models/counts.model';
-import { LoginService } from 'src/app/services/login.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TasksService {
-  private tasksCollection: AngularFirestoreCollection<Task>;
+  private tasksCollection: CollectionReference<Task>;
   private tasks$: Subject<Task[]> = new Subject();
   private tasksSub?: Subscription;
   private currentSort: SortModel = {
@@ -27,13 +36,10 @@ export class TasksService {
     direction: 'desc',
   };
   private currentFilter: FilterType = 'all';
-  private initRef: CollectionReference<firebase.firestore.DocumentData>;
 
-  constructor(private db: AngularFirestore, private loginService: LoginService) {
-    this.tasksCollection = db.collection<Task>(environment.collectionName, (ref) =>
-      ref.orderBy('timestamp', 'desc').where('userId', '==', loginService.getUserId())
-    );
-    this.initRef = this.tasksCollection.ref;
+  constructor(private db: Firestore, private loginService: LoginService) {
+    this.tasksCollection = collection(db, environment.collectionName) as CollectionReference<Task>;
+
     this.updateObservable();
   }
 
@@ -42,23 +48,20 @@ export class TasksService {
   }
 
   getCounts(): Observable<Counts> {
-    return this.db
-      .collection<Task>(environment.collectionName, (ref) => ref.where('userId', '==', this.loginService.getUserId()))
-      .valueChanges()
-      .pipe(
-        map((tasks) => {
-          return {
-            all: tasks.length,
-            finished: tasks.filter((t) => t.isFinished).length,
-            notFinished: tasks.filter((t) => !t.isFinished).length,
-          };
-        })
-      );
+    return collectionData<Task>(this.getUpdatedQuery(true)).pipe(
+      map((tasks) => {
+        return {
+          all: tasks.length,
+          finished: tasks.filter((t) => t.isFinished).length,
+          notFinished: tasks.filter((t) => !t.isFinished).length,
+        };
+      })
+    );
   }
 
   addTask(task: Task): Promise<DocumentReference> {
     task.userId = this.loginService.getUserId();
-    return this.tasksCollection.add(task).then((res) => {
+    return addDoc(this.tasksCollection, task).then((res) => {
       // TODO notify
       // this.notifier.notify('success', 'New Task for Summer is added!');
       return res;
@@ -67,7 +70,7 @@ export class TasksService {
 
   updateTask(task: Task): Promise<void> {
     const taskDoc = this.getDoc(task.id!);
-    return taskDoc.update(task).then((res) => {
+    return updateDoc(taskDoc, task).then((res) => {
       // TODO notify
       // this.notifier.notify('success', 'Task for Summer is updated!');
       return res;
@@ -76,7 +79,7 @@ export class TasksService {
 
   delete(taskId: string): Promise<void> {
     const taskDoc = this.getDoc(taskId);
-    return taskDoc.delete().then(() => {
+    return deleteDoc(taskDoc).then(() => {
       // TODO notify
       // this.notifier.notify('success', 'Task for Summer is deleted!');
     });
@@ -92,29 +95,33 @@ export class TasksService {
     this.updateObservable();
   }
 
-  private getUpdatedRef() {
-    let ref = this.initRef
-      .orderBy(this.currentSort.value, this.currentSort.direction)
-      .where('userId', '==', this.loginService.getUserId());
-    if (this.currentFilter === 'finished') {
-      ref = ref.where('isFinished', '==', true);
-    } else if (this.currentFilter === 'notFinished') {
-      ref = ref.where('isFinished', '==', false);
+  private getUpdatedQuery(ignoreExtendedFilters?: boolean): Query<Task> {
+    const queryArr = [
+      orderBy(this.currentSort.value, this.currentSort.direction),
+      where('userId', '==', this.loginService.getUserId()),
+    ];
+
+    if (!ignoreExtendedFilters) {
+      if (this.currentFilter === 'finished') {
+        queryArr.push(where('isFinished', '==', true));
+      } else if (this.currentFilter === 'notFinished') {
+        queryArr.push(where('isFinished', '==', false));
+      }
     }
 
-    return ref;
+    return query(this.tasksCollection, ...queryArr);
   }
 
   private updateObservable() {
-    this.tasksCollection = this.db.collection<Task>(environment.collectionName, this.getUpdatedRef.bind(this));
-
     if (this.tasksSub) {
       this.tasksSub.unsubscribe();
     }
-    this.tasksSub = this.tasksCollection.valueChanges({ idField: 'id' }).subscribe((data) => this.tasks$.next(data));
+    this.tasksSub = collectionData<Task>(this.getUpdatedQuery(), { idField: 'id' }).subscribe((data) =>
+      this.tasks$.next(data)
+    );
   }
 
-  private getDoc(taskId: string): AngularFirestoreDocument<Task> {
-    return this.tasksCollection.doc(taskId);
+  private getDoc(taskId: string): DocumentReference<Task> {
+    return doc(this.tasksCollection, taskId);
   }
 }
