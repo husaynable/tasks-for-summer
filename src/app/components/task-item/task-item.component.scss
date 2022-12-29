@@ -1,5 +1,3 @@
-@import '../../../material.theme.scss';
-
 :host {
   position: relative;
   padding: 15px 10px;
@@ -7,7 +5,7 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
-  background-color: mat-color($app-accent);
+  background-color: var(--color-accent);
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;

@@ -12,7 +12,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SubSink } from 'subsink';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-name-getter',
@@ -53,7 +52,7 @@ export class NameGetterComponent implements OnInit, OnDestroy {
       this.selectedPic = file;
 
       const fileExt = file.name.split('.').pop();
-      const id = uuidv4();
+      const id = crypto.randomUUID();
       const filePath = `${id}.${fileExt}`;
 
       this.picRef = ref(this.storage, filePath);
