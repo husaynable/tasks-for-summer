@@ -1,26 +1,36 @@
-<!-- <mat-checkbox [checked]="task.isFinished" (change)="changeTaskStatus()">
-</mat-checkbox> -->
-
-<span class="fill-wrapper" [style.right]="100 - holdingProgress * 100 + '%'"></span>
+<div class="fill-wrapper" *ngIf="task.isFinished"></div>
 
 <div class="task-name">
+
   <span class="task-name-span" *ngIf="!isEditing">{{ task.name }}</span>
 
   <mat-form-field *ngIf="isEditing">
+
     <input #nameInput placeholder="Task" matInput [value]="task.name" (keyup.enter)="changeTaskName(nameInput.value)" />
+
   </mat-form-field>
+
   <div class="actions">
-    <span *ngIf="task.plannedDate" [style.opacity]="task.isFinished ? '.5' : '1'">until {{ getDistance(task.plannedDate.toDate()) }}</span>
+
+    <span *ngIf="task.plannedDate" [style.opacity]="task.isFinished ? '.5' : '1'">
+       until {{ getDistance(task.plannedDate.toDate()) }}
+    </span>
+
     <mat-form-field style="width:1px;visibility:hidden;margin:0 -10px;" class="example-full-width" appearance="fill">
+
       <mat-label>Choose a date</mat-label>
+
       <input
         matInput
-        [matDatepicker]="$any(picker)"
+        [matDatepicker]="picker"
         [value]="task.plannedDate?.toDate()"
         (dateChange)="setPlannedDate($event)"
       />
+
       <mat-datepicker #picker></mat-datepicker>
+
     </mat-form-field>
+
     <button
       class="items-button datepicker"
       mat-icon-button
@@ -28,66 +38,108 @@
       [disabled]="task.isFinished"
       *ngIf="!isEditing"
     >
+
       <mat-icon>event</mat-icon>
+
     </button>
 
     <span *ngIf="task.drunkDrinks?.toString() && !isEditing" class="items-button">
+
       <button mat-raised-button color="primary" (click)="openItemsList('drinks')">
-        Drunk {{ task.drunkDrinks }} {{ task.drunkDrinks === 1 ? 'drink' : 'drinks' }}
+         Drunk {{ task.drunkDrinks }} {{ task.drunkDrinks === 1 ? 'drink' : 'drinks' }}
       </button>
+
     </span>
 
     <span *ngIf="task.watchedMovies?.toString() && !isEditing" class="items-button">
+
       <button mat-raised-button color="primary" (click)="openItemsList('movies')">
-        Watched {{ task.watchedMovies }} {{ task.watchedMovies === 1 ? 'movie' : 'movies' }}
+         Watched {{ task.watchedMovies }} {{ task.watchedMovies === 1 ? 'movie' : 'movies' }}
       </button>
+
     </span>
 
     <span *ngIf="task.countOfFedCats?.toString() && !isEditing" class="items-button">
+
       <button mat-raised-button color="primary" #fedCatsBtn (click)="openFedCatsCounter(fedCatsBtn)">
-        Fed {{ task.countOfFedCats }} cats
+         Fed {{ task.countOfFedCats }} cats
       </button>
+
     </span>
 
     <span *ngIf="task.counterCount !== undefined && !isEditing" class="items-button">
-      <button mat-fab color="primary" class="mat-elevation-z1" [disabled]="task.isFinished" #counterButton (click)="openCounter(counterButton)">
-        {{ task.counterCount }}
+
+      <button
+        mat-fab
+        color="primary"
+        class="mat-elevation-z1"
+        [disabled]="task.isFinished"
+        #counterButton
+        (click)="openCounter(counterButton)"
+      >
+         {{ task.counterCount }}
       </button>
+
     </span>
 
     <span *ngIf="task.list && !isEditing" class="items-button">
+
       <button mat-raised-button color="primary" (click)="openItemsList(task.list.name)">
-        {{ task.list.displayText }}
+         {{ task.list.displayText }}
       </button>
+
     </span>
+
   </div>
+
 </div>
 
-<!-- <div>{{ holdingProgress }}</div> -->
-
 <div class="task-edit-actions" *ngIf="isEditing">
+
   <button mat-icon-button (click)="changeTaskName(nameInput?.nativeElement.value)">
+
     <mat-icon>done</mat-icon>
+
   </button>
+
   <button mat-icon-button (click)="changeMode(false)">
+
     <mat-icon>clear</mat-icon>
+
   </button>
+
 </div>
 
 <button mat-icon-button [matMenuTriggerFor]="contextMenu" *ngIf="!isEditing">
+
   <mat-icon>more_vert</mat-icon>
+
 </button>
+
 <mat-menu #contextMenu="matMenu">
+
   <button mat-menu-item *ngIf="task.isFinished" (click)="changeTaskStatus()">
+
     <mat-icon>cancel</mat-icon>
+
     <span>Undo finishing</span>
+
   </button>
+
   <button mat-menu-item (click)="changeMode(true)">
+
     <mat-icon>edit</mat-icon>
+
     <span>Change task</span>
+
   </button>
+
   <button mat-menu-item (click)="deleteTask()">
+
     <mat-icon>delete</mat-icon>
+
     <span>Delete task</span>
+
   </button>
+
 </mat-menu>

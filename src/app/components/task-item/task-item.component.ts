@@ -1,7 +1,19 @@
-import { Component, OnInit, Input, HostBinding, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  HostBinding,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+  HostListener,
+  NgZone,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
+import { filter, fromEvent, merge, Observable, take } from 'rxjs';
 import { formatDistance } from 'date-fns';
 import { SubSink } from 'subsink';
 
@@ -13,11 +25,13 @@ import { FedCatsCounterOverlayService } from 'src/app/services/fed-cats-counter-
 import { ItemsListComponent } from '../items-list/items-list.component';
 import { CounterOverlayService } from '../../services/counter-overlay.service';
 import { Timestamp } from '@angular/fire/firestore';
+import { DocumentEventsService } from '../../services/document-events.service';
 
 @Component({
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskItemComponent implements OnInit, OnDestroy {
   @ViewChild('nameInput') public nameInput?: ElementRef;
@@ -29,64 +43,66 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   public holdingProgress = 0;
 
   subs = new SubSink();
-  private holdingAnimFrameID?: number;
-  private holdingCancelled = false;
-  private holdingDelayProgress = 0;
-  private holdingTick = 0;
+
+  private isMouseDown: boolean = false;
+  private startX?: number;
+  private itemTransformX: number = 0;
+  private lastX?: number;
+  private isMovingHorizontally?: boolean;
+  private openStateReached: boolean = false;
 
   constructor(
+    private elRef: ElementRef,
     private tasksService: TasksService,
     private dialog: MatDialog,
     private fedCatsCounterService: FedCatsCounterOverlayService,
-    private counterCountService: CounterOverlayService
+    private counterCountService: CounterOverlayService,
+    private ngZone: NgZone,
+    private documentEventsService: DocumentEventsService
   ) {}
 
-  @HostListener('touchstart', ['$event'])
   @HostListener('mousedown', ['$event'])
-  mouseDownListener() {
-    if (!this.task.isFinished) {
-      this.holdingCancelled = false;
-      this.holdingDelayProgress = 0;
-      this.holdingTick = 0;
-      this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
-    }
+  @HostListener('touchstart', ['$event'])
+  mouseDownListener(event: PointerEvent) {
+    this.isMouseDown = true;
+    this.startX = event.clientX;
+    this.lastX = this.startX;
   }
 
-  @HostListener('touchmove')
   @HostListener('touchend')
   @HostListener('mouseup')
-  mouseUpListener() {
-    if (!this.task.isFinished) {
-      this.holdingCancelled = true;
-      this.holdingDelayProgress = 0;
-      this.holdingTick = 0;
-      this.holdingProgress = 0;
-    }
-  }
-
-  updateHoldingProgress() {
-    if (!this.task.isFinished) {
-      if (this.holdingCancelled && this.holdingAnimFrameID) {
-        cancelAnimationFrame(this.holdingAnimFrameID);
-      } else if (this.holdingProgress < 1) {
-        if (this.holdingDelayProgress < 25) {
-          this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
-          this.holdingDelayProgress++;
-        } else {
-          const t = this.holdingTick / 70;
-          this.holdingProgress = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-          this.holdingAnimFrameID = requestAnimationFrame(this.updateHoldingProgress.bind(this));
-          this.holdingTick++;
-        }
-      } else {
-        this.changeTaskStatus();
-        this.holdingAnimFrameID && cancelAnimationFrame(this.holdingAnimFrameID);
-      }
+  pointerUpListener() {
+    if (!this.openStateReached) {
+      this.hideActions();
+      this.toInitialState();
     }
   }
 
   ngOnInit() {
-    this.holdingProgress = this.task.isFinished ? 1 : 0;
+    this.ngZone.runOutsideAngular(() => {
+      this.subs.sink = merge(
+        fromEvent<PointerEvent>(this.elRef.nativeElement, 'mousemove'),
+        fromEvent<PointerEvent>(this.elRef.nativeElement, 'touchmove')
+      )
+        .pipe(filter((ev) => this.validateForSwiper(ev)))
+        .subscribe((event) => {
+          requestAnimationFrame(() => {
+            const swipeDelta = event.clientX - this.lastX!;
+            this.itemTransformX += swipeDelta;
+            if (Math.abs(this.itemTransformX) > 150) {
+              this.itemTransformX = this.itemTransformX < 0 ? -150 : 150;
+              this.openStateReached = true;
+              this.isMouseDown = false;
+              this.isMovingHorizontally = undefined;
+              this.subscribeToActionsHiding();
+            } else {
+              this.openStateReached = false;
+            }
+            this.elRef.nativeElement.style.transform = `translateX(${this.itemTransformX}px)`;
+            this.lastX = event.clientX;
+          });
+        });
+    });
   }
 
   changeMode(isEditingMode: boolean) {
@@ -157,5 +173,48 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  private validateForSwiper(event: PointerEvent): boolean {
+    if (!this.isMouseDown) {
+      return false;
+    }
+
+    if (this.isMovingHorizontally == null) {
+      this.isMovingHorizontally = Math.abs(event.movementX) > Math.abs(event.movementY);
+    }
+
+    if (!this.isMovingHorizontally) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private hideActions(): void {
+    this.elRef.nativeElement.style.transform = 'none';
+  }
+
+  private toInitialState(): void {
+    this.isMouseDown = false;
+    this.isMovingHorizontally = undefined;
+    this.startX = undefined;
+    this.lastX = undefined;
+    this.itemTransformX = 0;
+  }
+
+  private subscribeToActionsHiding(): void {
+    merge(this.escKeySubscriber).subscribe(() => {
+      this.openStateReached = false;
+      this.hideActions();
+      this.toInitialState();
+    });
+  }
+
+  private get escKeySubscriber(): Observable<KeyboardEvent> {
+    return this.documentEventsService.subscribeToEvent<KeyboardEvent>('keyup').pipe(
+      filter((ev) => ev.key === 'Escape'),
+      take(1)
+    );
   }
 }
