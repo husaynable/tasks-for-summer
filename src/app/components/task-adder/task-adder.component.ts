@@ -80,7 +80,7 @@ export class TaskAdderComponent {
       if (this.withCounter) {
         task.counterCount = 0;
       }
-      await this.tasksService.addTask(task);
+      await this.tasksService.addTask({ task });
       this.newTaskName = undefined;
       this.toggle();
     }

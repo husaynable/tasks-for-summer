@@ -59,7 +59,7 @@ export class TasksService {
     );
   }
 
-  addTask(task: Task): Promise<DocumentReference> {
+  addTask({ task }: { task: Task }): Promise<DocumentReference> {
     task.userId = this.loginService.getUserId();
     return addDoc(this.tasksCollection, task).then((res) => {
       // TODO notify
