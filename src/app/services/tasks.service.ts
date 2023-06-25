@@ -37,7 +37,7 @@ export class TasksService {
   };
   private currentFilter: FilterType = 'all';
 
-  constructor(private db: Firestore, private loginService: LoginService) {
+  constructor(db: Firestore, private loginService: LoginService) {
     this.tasksCollection = collection(db, environment.collectionName) as CollectionReference<Task>;
 
     this.updateObservable();
