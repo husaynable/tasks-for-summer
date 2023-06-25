@@ -59,30 +59,21 @@ export class TasksService {
     );
   }
 
-  addTask({ task }: { task: Task }): Promise<DocumentReference> {
+  async addTask(task: Task): Promise<DocumentReference> {
     task.userId = this.loginService.getUserId();
-    return addDoc(this.tasksCollection, task).then((res) => {
-      // TODO notify
-      // this.notifier.notify('success', 'New Task for Summer is added!');
-      return res;
-    });
+    const res = await addDoc(this.tasksCollection, task);
+    return res;
   }
 
-  updateTask(task: Task): Promise<void> {
+  async updateTask(task: Task): Promise<void> {
     const taskDoc = this.getDoc(task.id!);
-    return updateDoc(taskDoc, task).then((res) => {
-      // TODO notify
-      // this.notifier.notify('success', 'Task for Summer is updated!');
-      return res;
-    });
+    const res = await updateDoc(taskDoc, task);
+    return res;
   }
 
-  delete(taskId: string): Promise<void> {
+  async delete(taskId: string): Promise<void> {
     const taskDoc = this.getDoc(taskId);
-    return deleteDoc(taskDoc).then(() => {
-      // TODO notify
-      // this.notifier.notify('success', 'Task for Summer is deleted!');
-    });
+    await deleteDoc(taskDoc);
   }
 
   applySort(sort: SortModel) {
