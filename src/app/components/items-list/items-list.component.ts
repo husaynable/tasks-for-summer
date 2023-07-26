@@ -1,8 +1,7 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, Inject, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Timestamp } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { SubSink } from 'subsink';
 
 import { ItemModel } from 'src/app/models/item.model';
 import { ItemsService } from 'src/app/services/items.service';
@@ -10,20 +9,27 @@ import { CreateItemModel } from 'src/app/models/create-item.model';
 import { ItemsType } from 'src/app/models/items.type';
 
 import { NameGetterComponent } from '../name-getter/name-getter.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-items-list',
   templateUrl: './items-list.component.html',
   styleUrls: ['./items-list.component.css'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgIf, NgFor, AsyncPipe, DatePipe, MatButtonModule, MatIconModule, MatDialogModule],
 })
-export class ItemsListComponent implements OnInit, OnDestroy {
+export class ItemsListComponent implements OnInit {
   public items$?: Observable<ItemModel[]>;
   public captions = {
     movies: 'Movies List',
     drinks: 'Drunk Drinks',
   };
 
-  private subs = new SubSink();
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     public dialogRef: MatDialogRef<ItemsListComponent>,
@@ -38,16 +44,18 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   }
 
   openNameGetter() {
-    const dialogRef = this.modal.open(NameGetterComponent, {
-      width: '400px',
-      data: { hidePicAttachment: false },
-    });
-
-    this.subs.sink = dialogRef.afterClosed().subscribe((newItem: CreateItemModel) => {
-      if (newItem && newItem.name) {
-        this.addItem(newItem.name, newItem.picUrl);
-      }
-    });
+    this.modal
+      .open(NameGetterComponent, {
+        width: '400px',
+        data: { hidePicAttachment: false },
+      })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((newItem: CreateItemModel) => {
+        if (newItem && newItem.name) {
+          this.addItem(newItem.name, newItem.picUrl);
+        }
+      });
   }
 
   addItem(name: string, attachUrl?: string) {
@@ -79,9 +87,5 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
   close() {
     this.dialogRef.close();
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 }

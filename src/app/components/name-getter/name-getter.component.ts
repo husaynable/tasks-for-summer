@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   percentage,
   ref,
@@ -8,17 +9,33 @@ import {
   uploadBytesResumable,
   deleteObject,
 } from '@angular/fire/storage';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { from, Observable } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-name-getter',
   templateUrl: './name-getter.component.html',
   styleUrls: ['./name-getter.component.css'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    NgIf,
+    AsyncPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatDialogModule,
+    MatButtonModule,
+  ],
 })
-export class NameGetterComponent implements OnInit, OnDestroy {
+export class NameGetterComponent implements OnInit {
   public hasAttachedPic = false;
   public selectedPic?: File;
   public uploadPercent?: Observable<number | undefined>;
@@ -26,7 +43,6 @@ export class NameGetterComponent implements OnInit, OnDestroy {
   public picUrl?: string;
   public hidePicAttachment = false;
 
-  private subSink = new SubSink();
   private picRef?: StorageReference;
 
   constructor(
@@ -78,9 +94,5 @@ export class NameGetterComponent implements OnInit, OnDestroy {
 
   close(name: string) {
     this.dialogRef.close({ name, picUrl: this.picUrl });
-  }
-
-  ngOnDestroy() {
-    this.subSink.unsubscribe();
   }
 }

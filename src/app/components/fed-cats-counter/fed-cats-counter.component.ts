@@ -1,13 +1,18 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { trigger, transition, animate, style, state } from '@angular/animations';
 
 import { FedCatsCounterOverlayRef } from 'src/app/services/fed-cats-counter-overlay-ref';
 import { FED_CATS_COUNT } from 'src/app/utils/injection-tokens';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-fed-cats-counter',
   templateUrl: './fed-cats-counter.component.html',
   styleUrls: ['./fed-cats-counter.component.css'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatIconModule, MatButtonModule],
   animations: [
     trigger('saveState', [
       state('ready', style({ transform: 'translateX(20px)' })),

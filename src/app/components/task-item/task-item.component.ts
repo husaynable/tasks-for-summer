@@ -5,17 +5,22 @@ import {
   HostBinding,
   ViewChild,
   ElementRef,
-  OnDestroy,
   HostListener,
   NgZone,
   ChangeDetectionStrategy,
+  DestroyRef,
+  inject,
 } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { filter, fromEvent, merge, Observable, take } from 'rxjs';
 import { formatDistance } from 'date-fns';
-import { SubSink } from 'subsink';
 
 import { Task } from 'src/app/models/task.model';
 import { TasksService } from 'src/app/services/tasks.service';
@@ -26,14 +31,27 @@ import { ItemsListComponent } from '../items-list/items-list.component';
 import { CounterOverlayService } from '../../services/counter-overlay.service';
 import { Timestamp } from '@angular/fire/firestore';
 import { DocumentEventsService } from '../../services/document-events.service';
+import { NgIf } from '@angular/common';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.scss'],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    NgIf,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+  ],
 })
-export class TaskItemComponent implements OnInit, OnDestroy {
+export class TaskItemComponent implements OnInit {
   @ViewChild('nameInput') public nameInput?: ElementRef;
   @HostBinding('class') class = 'app-task-item mat-elevation-z1';
   @Input() public task!: Task;
@@ -42,7 +60,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
   public holdingProgress = 0;
 
-  subs = new SubSink();
+  private destroyRef = inject(DestroyRef);
 
   private isMouseDown: boolean = false;
   private startX?: number;
@@ -80,11 +98,14 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this.subs.sink = merge(
+      merge(
         fromEvent<PointerEvent>(this.elRef.nativeElement, 'mousemove'),
         fromEvent<PointerEvent>(this.elRef.nativeElement, 'touchmove')
       )
-        .pipe(filter((ev) => this.validateForSwiper(ev)))
+        .pipe(
+          filter((ev) => this.validateForSwiper(ev)),
+          takeUntilDestroyed(this.destroyRef)
+        )
         .subscribe((event) => {
           requestAnimationFrame(() => {
             const swipeDelta = event.clientX - this.lastX!;
@@ -122,7 +143,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
   openFedCatsCounter(matBtn: MatButton) {
     const dialogRef = this.fedCatsCounterService.open(matBtn._elementRef, this.task.countOfFedCats);
-    this.subs.sink = dialogRef.aftefClosed.subscribe((fedCatsCount) => {
+    dialogRef.aftefClosed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((fedCatsCount) => {
       if (fedCatsCount !== undefined && this.task.countOfFedCats !== fedCatsCount) {
         const newTask = { ...this.task, countOfFedCats: fedCatsCount } as Task;
         this.tasksService.updateTask(newTask);
@@ -132,7 +153,7 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
   openCounter(matButton: MatButton) {
     const dialogRef = this.counterCountService.open(matButton._elementRef, this.task.counterCount);
-    this.subs.sink = dialogRef.aftefClosed.subscribe((counterCount) => {
+    dialogRef.aftefClosed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((counterCount) => {
       if ((!!counterCount || counterCount === 0) && this.task.counterCount !== counterCount) {
         const updatedTask = { ...this.task, counterCount };
         this.tasksService.updateTask(updatedTask);
@@ -169,10 +190,6 @@ export class TaskItemComponent implements OnInit, OnDestroy {
 
   async deleteTask() {
     await this.tasksService.delete(this.task.id!);
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   private validateForSwiper(event: PointerEvent): boolean {

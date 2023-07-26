@@ -1,13 +1,17 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TasksService } from 'src/app/services/tasks.service';
 import { Observable } from 'rxjs';
 import { Counts } from '../../models/counts.model';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-order-by',
   templateUrl: './order-by.component.html',
   styleUrls: ['./order-by.component.scss'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AsyncPipe, MatButtonToggleModule],
 })
 export class OrderByComponent implements OnInit {
   @Output() public changed = new EventEmitter<SortModel>();

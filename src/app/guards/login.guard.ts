@@ -1,28 +1,22 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LoginService } from '../services/login.service';
+import { User } from '@angular/fire/auth';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class LoginGuard implements CanActivate {
-  constructor(private loginService: LoginService, private router: Router) {}
+export function loginGuard(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  const loginService: LoginService = inject(LoginService);
+  const router: Router = inject(Router);
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.loginService.authState.pipe(
-      map((user) => {
-        if (!user) {
-          this.router.navigate(['/login']);
-          return false;
-        }
-        this.loginService.setUserId(user.uid);
-        return true;
-      })
-    );
-  }
+  return loginService.authState.pipe(
+    map((user: User | null) => {
+      if (!user) {
+        router.navigate(['/login']);
+        return false;
+      }
+      loginService.setUserId(user.uid);
+      return true;
+    })
+  );
 }

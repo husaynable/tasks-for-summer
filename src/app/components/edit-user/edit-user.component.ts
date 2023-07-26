@@ -1,24 +1,32 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject, DestroyRef } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
-import { SubSink } from 'subsink';
 import { MatDialogRef } from '@angular/material/dialog';
 import { updateProfile, User } from '@angular/fire/auth';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.css'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgIf, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
 })
-export class EditUserComponent implements OnInit, OnDestroy {
+export class EditUserComponent implements OnInit {
   public username?: string | null;
 
+  private destroyRef = inject(DestroyRef);
   private user?: User | null;
-  private subs: SubSink = new SubSink();
 
   constructor(private loginService: LoginService, private dialogRef: MatDialogRef<EditUserComponent>) {}
 
   ngOnInit(): void {
-    this.subs.sink = this.loginService.authState.subscribe((user) => {
+    this.loginService.authState.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((user) => {
       this.user = user;
       this.username = user?.displayName;
     });
@@ -33,9 +41,5 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
   closeDialog() {
     this.dialogRef.close();
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 }

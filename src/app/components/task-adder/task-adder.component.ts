@@ -1,18 +1,29 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, ViewChild, inject } from '@angular/core';
 import { animate, state, style, transition, trigger, keyframes } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { Timestamp } from '@angular/fire/firestore';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { TasksService } from 'src/app/services/tasks.service';
 import { focusOnInput } from 'src/app/utils/functions';
 
 import { NameGetterComponent } from '../name-getter/name-getter.component';
 import { Task } from '../../models/task.model';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-task-adder',
   templateUrl: './task-adder.component.html',
   styleUrls: ['./task-adder.component.css'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgIf, FormsModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatIconModule],
   animations: [
     trigger('inputState', [
       state('initial, void, hidden', style({ opacity: '0', transform: 'scale(0)', width: '0', height: '0' })),
@@ -44,6 +55,8 @@ export class TaskAdderComponent {
   withCounter = false;
   listName?: string;
   @ViewChild('taskNameInput') taskNameInput?: ElementRef;
+
+  private destroyRef = inject(DestroyRef);
 
   constructor(private tasksService: TasksService, private modal: MatDialog) {}
 
@@ -89,14 +102,17 @@ export class TaskAdderComponent {
   withListToggle(checked: boolean) {
     this.withList = checked;
     if (checked) {
-      const dialogRef = this.modal.open(NameGetterComponent, { width: '400px', data: { hidePicAttachment: true } });
-      dialogRef.afterClosed().subscribe((nameModel) => {
-        if (nameModel && nameModel.name) {
-          this.listName = nameModel.name;
-        } else {
-          this.withList = false;
-        }
-      });
+      this.modal
+        .open(NameGetterComponent, { width: '400px', data: { hidePicAttachment: true } })
+        .afterClosed()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((nameModel) => {
+          if (nameModel && nameModel.name) {
+            this.listName = nameModel.name;
+          } else {
+            this.withList = false;
+          }
+        });
     } else {
       this.listName = undefined;
     }

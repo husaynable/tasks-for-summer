@@ -1,31 +1,32 @@
-import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, HostBinding, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TasksService } from 'src/app/services/tasks.service';
 
 @Component({
   selector: 'app-tasks-count',
   templateUrl: './tasks-count.component.html',
   styleUrls: ['./tasks-count.component.scss'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksCountComponent implements OnInit, OnDestroy {
+export class TasksCountComponent implements OnInit {
   @HostBinding('class') class = 'mat-elevation-z3';
 
   allTasksCount = 0;
   finishedTasksCount = 0;
   pageOffset = 0;
 
-  tasksSub$!: Subscription;
+  private destoyRef = inject(DestroyRef);
 
   constructor(private tasksService: TasksService) {}
 
   ngOnInit() {
-    this.tasksSub$ = this.tasksService.getTasks().subscribe((tasks) => {
-      this.allTasksCount = tasks.length;
-      this.finishedTasksCount = tasks.filter((t) => t.isFinished).length;
-    });
-  }
-
-  ngOnDestroy() {
-    this.tasksSub$.unsubscribe();
+    this.tasksService
+      .getTasks()
+      .pipe(takeUntilDestroyed(this.destoyRef))
+      .subscribe((tasks) => {
+        this.allTasksCount = tasks.length;
+        this.finishedTasksCount = tasks.filter((t) => t.isFinished).length;
+      });
   }
 }

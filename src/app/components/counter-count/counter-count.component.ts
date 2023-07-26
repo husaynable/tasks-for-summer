@@ -1,11 +1,17 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
 import { CounterOverlayRef } from '../../services/counter-overlay-ref';
 import { COUNTER_COUNT } from '../../utils/injection-tokens';
 
 @Component({
   templateUrl: './counter-count.component.html',
   styleUrls: ['./counter-count.component.css'],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatButtonModule, MatIconModule],
   animations: [
     trigger('saveState', [
       state('ready', style({ transform: 'translateX(20px)' })),
